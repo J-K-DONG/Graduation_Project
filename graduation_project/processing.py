@@ -34,7 +34,7 @@ def GaussianNoise(src, means, sigma):
 
 
 if __name__ == '__main__':
-    clear_img_1 = cv2.imread('clearpicture.jpeg', flags=0)  # 读取原图并赋给一个对象
+    clear_img_1 = cv2.imread('clear_picture.jpeg', flags=0)  # 读取原图并赋给一个对象
     cv2.imshow('clear_img', clear_img_1)    # 显示原图
 
 # 正态分布:
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     cv2.imshow('gaussian_sigma_15', GaussianImg)
     cv2.imwrite('gaussian_sigma_15.jpg', GaussianImg)
 
-    clear_img_2 = cv2.imread('clearpicture.jpeg', flags=0)  # 赋给第二个对象
+    clear_img_2 = cv2.imread('clear_picture.jpeg', flags=0)  # 赋给第二个对象
     SaltAndPepperImg = SaltAndPepper(clear_img_2, 0.05)
     cv2.imshow('salt&pepper + 0.05', SaltAndPepperImg)
     cv2.imwrite('salt&pepper_0.05.jpg', SaltAndPepperImg)
