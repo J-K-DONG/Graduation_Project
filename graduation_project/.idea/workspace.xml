@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a5a621d6-0093-4621-ab84-15f3c6ea55c4" name="Default Changelist" comment="add random offset_8" />
+    <list default="true" id="a5a621d6-0093-4621-ab84-15f3c6ea55c4" name="Default Changelist" comment="add random offset_8">
+      <change beforePath="$PROJECT_DIR$/random_offset.py" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,24 +13,16 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/graduation_project$processing.coverage" NAME="processing Coverage Results" MODIFIED="1547395747297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/graduation_project$image_processing.coverage" NAME="image_processing Coverage Results" MODIFIED="1546774665324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/graduation_project$ImageProcess.coverage" NAME="ImageProcess Coverage Results" MODIFIED="1547705772290" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/graduation_project$random_offset.coverage" NAME="random_offset Coverage Results" MODIFIED="1547614926923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/image_processing.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/processing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="750">
-              <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="17" />
+            <state relative-caret-position="60">
+              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -36,13 +30,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/random_offset.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ImageProcess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-42">
-              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="1500">
+              <caret line="100" column="46" selection-start-line="100" selection-start-column="46" selection-end-line="100" selection-end-column="46" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#189#199#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,6 +60,7 @@
         <option value="$PROJECT_DIR$/image_processing.py" />
         <option value="$PROJECT_DIR$/processing.py" />
         <option value="$PROJECT_DIR$/random_offset.py" />
+        <option value="$PROJECT_DIR$/ImageProcess.py" />
       </list>
     </option>
   </component>
@@ -84,6 +79,10 @@
       <pane id="ProjectPane">
         <subPane>
           <expand>
+            <path>
+              <item name="graduation_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="graduation_project" type="462c0819:PsiDirectoryNode" />
+            </path>
             <path>
               <item name="graduation_project" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
@@ -121,7 +120,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.random_offset">
+  <component name="RunManager" selected="Python.ImageProcess">
+    <configuration name="ImageProcess" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="graduation_project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImageProcess.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="image_processing" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="graduation_project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -190,6 +211,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ImageProcess" />
         <item itemvalue="Python.random_offset" />
         <item itemvalue="Python.processing" />
         <item itemvalue="Python.image_processing" />
@@ -210,12 +232,13 @@
       <workItem from="1547380485372" duration="2085000" />
       <workItem from="1547382754744" duration="689000" />
       <workItem from="1547388725132" duration="9162000" />
-      <workItem from="1547613480185" duration="2337000" />
+      <workItem from="1547613480185" duration="2731000" />
+      <workItem from="1547628041960" duration="12079000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34293000" />
+    <option name="totallyTimeSpent" value="46766000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -230,7 +253,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984472" visible="true" weight="0.2267525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984472" visible="true" weight="0.22961374" />
       <window_info id="Structure" order="1" sideWeight="0.5015528" side_tool="true" weight="0.22389127" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -246,7 +269,7 @@
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50143063" side_tool="true" weight="0.2614458" />
       <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49928468" weight="0.32891566" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32891566" />
-      <window_info anchor="bottom" auto_hide="true" x="193" y="128" width="1060" height="644" id="SciView" order="13" type="WINDOWED" weight="0.55060244" />
+      <window_info anchor="bottom" x="193" y="128" width="1060" height="644" id="SciView" order="13" weight="0.55060244" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -258,23 +281,6 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Glena.jpg " />
-    <entry file="file://$PROJECT_DIR$/image_processing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/processing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/graduation_project/lib/python3.7/site-packages/matplotlib/pyplot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
@@ -296,15 +302,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/image_processing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/random_offset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-42">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        <state relative-caret-position="120">
+          <caret line="8" column="23" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ImageProcess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1500">
+          <caret line="100" column="46" selection-start-line="100" selection-start-column="46" selection-end-line="100" selection-end-column="46" />
+          <folding>
+            <element signature="e#189#199#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/processing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
