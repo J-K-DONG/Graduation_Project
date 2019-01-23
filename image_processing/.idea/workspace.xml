@@ -2,21 +2,120 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5882466e-da40-4a98-8025-05d31595522f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/graduation_project.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/other.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/ImageProcess.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/blurred_img.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/clear_img.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/gaussian_sigma_15.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/gaussian_sigma_5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/processing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../graduation_project/salt&amp;pepper_0.05.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/image_processing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/image_processing.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImageProcess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_10_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_11_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_12_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_13_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_14_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_15_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_16_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_17_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_18_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_19_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_1_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_20_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_21_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_22_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_23_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_24_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_25_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_26_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_27_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_28_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_29_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_2_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_30_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_31_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_32_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_33_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_34_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_35_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_36_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_37_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_38_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_39_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_3_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_40_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_41_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_42_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_43_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_44_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_45_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_46_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_47_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_48_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_49_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_4_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_50_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_51_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_52_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_53_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_54_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_55_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_5_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_6_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_7_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_8_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_noise/img_9_gaussian_noise_sigma_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_10_offset_-8_9.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_11_offset_-1_11.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_12_offset_8_-11.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_13_offset_-3_10.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_14_offset_24_-25.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_15_offset_-7_-16.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_16_offset_9_6.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_17_offset_24_4.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_18_offset_5_-12.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_19_offset_10_17.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_1_offset_0_0.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_20_offset_6_21.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_21_offset_2_6.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_22_offset_19_-15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_23_offset_-7_-22.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_24_offset_-17_-20.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_25_offset_4_5.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_26_offset_24_-3.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_27_offset_25_-8.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_28_offset_-17_-9.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_29_offset_-22_-10.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_2_offset_-14_-1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_30_offset_16_23.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_31_offset_7_-20.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_32_offset_6_-2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_33_offset_-16_-19.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_34_offset_-15_-10.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_35_offset_-14_-13.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_36_offset_-9_6.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_37_offset_9_0.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_38_offset_-7_15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_39_offset_24_-17.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_3_offset_6_-14.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_40_offset_14_16.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_41_offset_-24_-16.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_42_offset_24_-12.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_43_offset_8_-12.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_44_offset_23_9.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_45_offset_-11_-6.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_46_offset_0_-10.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_47_offset_16_-14.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_48_offset_-22_-25.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_49_offset_24_-10.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_4_offset_-6_20.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_50_offset_18_-16.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_51_offset_19_-15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_52_offset_-7_-15.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_53_offset_-9_14.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_54_offset_14_-11.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_55_offset_8_1.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_5_offset_23_-8.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_6_offset_13_-2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_7_offset_-17_-16.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_8_offset_-4_6.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_offset/img_9_offset_-2_8.jpeg" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,15 +124,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/image_processing$ImageProcess.coverage" NAME="ImageProcess Coverage Results" MODIFIED="1547885891544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/image_processing$ImageProcess.coverage" NAME="ImageProcess Coverage Results" MODIFIED="1548219439651" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ImageProcess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="100" column="22" lean-forward="true" selection-start-line="100" selection-start-column="22" selection-end-line="100" selection-end-column="22" />
+            <state relative-caret-position="253">
+              <caret line="205" column="13" selection-start-line="205" selection-start-column="13" selection-end-line="205" selection-end-column="13" />
               <folding>
                 <element signature="e#152#162#0" expanded="true" />
               </folding>
@@ -74,6 +173,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -85,7 +185,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -145,37 +244,39 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1547882489331</updated>
-      <workItem from="1547882492180" duration="2743000" />
+      <workItem from="1547882492180" duration="7482000" />
+      <workItem from="1547969207847" duration="25483000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2743000" />
+    <option name="totallyTimeSpent" value="32965000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21387696" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2167382" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.24819277" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" visible="true" weight="0.2746988" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="SciView" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007153" side_tool="true" weight="0.2746988" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32891566" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,20 +300,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/MethodTest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="30" column="34" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="34" />
+          <folding>
+            <element signature="e#151#164#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/os.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="258" selection-start-line="258" selection-end-line="258" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/clear_img.jpeg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/MethodTest.py">
+    <entry file="file://$PROJECT_DIR$/offset_data.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="15" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
+        <state>
+          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ImageProcess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="100" column="22" lean-forward="true" selection-start-line="100" selection-start-column="22" selection-end-line="100" selection-end-column="22" />
+        <state relative-caret-position="253">
+          <caret line="205" column="13" selection-start-line="205" selection-start-column="13" selection-end-line="205" selection-end-column="13" />
           <folding>
             <element signature="e#152#162#0" expanded="true" />
           </folding>
