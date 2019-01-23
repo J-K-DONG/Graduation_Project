@@ -203,10 +203,14 @@ if __name__ == "__main__":
         shutil.rmtree(image_offset_dir)
     if os.path.exists(image_offset_txt):
         os.remove(image_offset_txt)
-
-    # 本次运行结果：
     img_clear = cv2.imread('clear_img.jpeg', flags=0)
-    img_offset, offset_data = method.add_random_offset(img_clear)  # 添加偏移的图片list
+
+    # if os.path.exists(image_offset_dir):  # 不再重复添加偏移量 直接读取上次做好的图像集
+    #     img_offset = method.load_images("image_offset/")
+    # else:
+    #     img_offset, offset_data = method.add_random_offset(img_clear)  # 添加偏移的图片list
+
+    img_offset, offset_data = method.add_random_offset(img_clear)
     clear_kps, clear_features = method.get_feature_point(img_clear, "sift")
 
     for i in range(offset_num):
