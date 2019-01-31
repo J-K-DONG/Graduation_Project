@@ -16,6 +16,7 @@ import random
 import os
 import shutil
 
+
 class ImageMethod:
     searchRatio = 0.75  # 0.75 is common value for matches
 
@@ -103,6 +104,7 @@ class ImageMethod:
             descriptor = cv2.xfeatures2d.SIFT_create()
         elif feature_methord == "surf":
             descriptor = cv2.xfeatures2d.SURF_create()
+            # print("use surf")
         kps, features = descriptor.detectAndCompute(image, None)
         kps = np.float32([kp.pt for kp in kps])
         return kps, features
@@ -127,11 +129,11 @@ class ImageMethod:
                     matches.append((m[0].trainIdx, m[0].queryIdx))
         return matches
 
-    def get_offset_by_mode(self, kpsA, kpsB, matches, offsetEvaluate=10):
+    def get_offset_by_mode(self, kpsA, kpsB, matches, offsetEvaluate=3):
         """
         功能：通过求众数的方法获得偏移量
-        :param kpsA: 第一张图像的特征
-        :param kpsB: 第二张图像的特征
+        :param kpsA: 第一张图像的特征（原图）
+        :param kpsB: 第二张图像的特征（测试图片）
         :param matches: 配准列表
         :param offsetEvaluate: 如果众数的个数大于本阈值，则配准正确，默认为10
         :return: 返回(totalStatus, [dx, dy]), totalStatus 是否正确，[dx, dy]默认[0, 0]
@@ -149,8 +151,8 @@ class ImageMethod:
             # dyList.append(int(round(ptA[1] - ptB[1])))
             if int(ptA[0] - ptB[0]) == 0 and int(ptA[1] - ptB[1]) == 0:
                 continue
-            dxList.append(int(ptB[0] - ptA[0]))
-            dyList.append(int(ptB[1] - ptA[1]))
+            dxList.append(int(ptA[0] - ptB[0]))
+            dyList.append(int(ptA[1] - ptB[1]))
         if len(dxList) == 0:
             dxList.append(0)
             dyList.append(0)
@@ -167,6 +169,7 @@ class ImageMethod:
 
         if num < offsetEvaluate:
             totalStatus = False
+            print(str(num))
         # self.printAndWrite("  In Mode, The number of num is " + str(num) + " and the number of offsetEvaluate is "+str(offsetEvaluate))
         return (totalStatus, [dy, dx])
 
@@ -211,14 +214,14 @@ if __name__ == "__main__":
     #     img_offset, offset_data = method.add_random_offset(img_clear)  # 添加偏移的图片list
 
     img_offset, offset_data = method.add_random_offset(img_clear)
-    clear_kps, clear_features = method.get_feature_point(img_clear, "sift")
+    clear_kps, clear_features = method.get_feature_point(img_clear, "surf")
 
     for i in range(offset_num):
         # print("第" + str(i+1) + "幅图片的偏移量列表为：", offset_data[i])
-        offset_kps_temp, offset_features_temp = method.get_feature_point(img_offset[i], "sift")
+        offset_kps_temp, offset_features_temp = method.get_feature_point(img_offset[i], "surf")
         offset_kps.append(offset_kps_temp)
         offset_features.append(offset_features_temp)
-        offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp, match_method="sift")
+        offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp, match_method="surf")
         offset_matches.append(offset_matches_temp)
         total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
         print("第" + str(i+1) + "张偏移图片匹配结果：", total_status, [dx, dy])
