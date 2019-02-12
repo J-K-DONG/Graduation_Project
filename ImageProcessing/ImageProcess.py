@@ -6,7 +6,7 @@
 @author: JK_DONG
 @software: PyCharm
 @file: ImageProcess.py
-@time: 2019-01-19 15:23
+@time: 2019-02-12 11:47
 
 """
 
@@ -151,8 +151,8 @@ class ImageMethod:
             # dyList.append(int(round(ptA[1] - ptB[1])))
             if int(ptA[0] - ptB[0]) == 0 and int(ptA[1] - ptB[1]) == 0:
                 continue
-            dxList.append(int(ptA[0] - ptB[0]))
-            dyList.append(int(ptA[1] - ptB[1]))
+            dxList.append(int(ptB[0] - ptA[0]))
+            dyList.append(int(ptB[1] - ptA[1]))
         if len(dxList) == 0:
             dxList.append(0)
             dyList.append(0)
@@ -219,10 +219,7 @@ if __name__ == "__main__":
     for i in range(offset_num):
         # print("第" + str(i+1) + "幅图片的偏移量列表为：", offset_data[i])
         offset_kps_temp, offset_features_temp = method.get_feature_point(img_offset[i], "surf")
-        offset_kps.append(offset_kps_temp)
-        offset_features.append(offset_features_temp)
         offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp, match_method="surf")
-        offset_matches.append(offset_matches_temp)
         total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
         print("第" + str(i+1) + "张偏移图片匹配结果：", total_status, [dx, dy])
         if total_status:
@@ -235,5 +232,6 @@ if __name__ == "__main__":
 
     match_offset_percentage = match_offset_num / offset_num
     print('通过对比偏移量和计算结果的正确率为：{:.2%}'.format(match_offset_percentage))
+
 
 
