@@ -22,14 +22,17 @@ class ImageMethod:
     image_noise_dir = "image_noise/"
     image_offset_dir = "image_offset/"
     image_offset_txt = "offset_data.txt"
+    image_num = 55
+    feature_method = "surf"
+    match_method = "surf"
+    offsetEvaluate = 3
 
 
     def add_random_gaussian_noise(self, image):
         """
         添加高斯随机噪声
         :param image: 图像list
-        :param sigma: 标准差
-        :return: image_noise 添加高斯噪声后的图像list
+        :return: image_noise: 添加高斯噪声后的图像list     gaussian_means: 高斯噪声的均值list    gaussian_sigma: 高斯噪声的方差list
         """
         image_noise = image  # 读进来是uint8类型
         gaussian_means = []
@@ -37,7 +40,7 @@ class ImageMethod:
         if not os.path.exists(self.image_noise_dir):
             os.mkdir(self.image_noise_dir)
 
-        for k in range(len(image_noise)):
+        for k in range(self.image_num):
             means = np.mean(image_noise[k])
             print("means is : " + str(means))
             gaussian_means.append(means)
@@ -59,7 +62,7 @@ class ImageMethod:
 
     def add_salt_pepper_noise(self, src, percetage):
         """
-        添加椒盐噪声 (测试)(single img)
+        添加椒盐噪声 (测试  不完善)(single img)
         :param src: 单张图像
         :param percetage:
         :return:
@@ -75,22 +78,21 @@ class ImageMethod:
                 NoiseImg[rand_x, rand_y] = 255  # 将该点变为白点
         return NoiseImg
 
+
     def add_random_offset(self, image):
         """
         为多张图像添加随机偏移 并保存偏移的图片和每张图片的偏移量
         :param image: 图像list
         :return:  img_offset:添加偏移量的图像list   offset_data:所有图像的偏移量list [[rand_x, rand_y],[rand_x, rand_y]...]
         """
-        img_num = 55
         rows, cols = image.shape[0:2]
         img_offset = []  # 添加偏移后的图片列表
         offset_data = []  # 55张图片的偏移量列表
         offset_xy = []
-        # image_dir = "image_offset/"
         if not os.path.exists(self.image_offset_dir):
             os.mkdir(self.image_offset_dir)
         f = open('offset_data.txt', 'a')
-        for i in range(img_num):
+        for i in range(self.image_num):
             rand_x = random.randint(-25, 25)
             rand_y = random.randint(-25, 25)
             f.write("[" + str(rand_x) + ", " + str(rand_y) + "]\n")
@@ -104,23 +106,23 @@ class ImageMethod:
         cv2.waitKey()
         return img_offset, offset_data
 
-    def get_feature_point(self, image, feature_methord):
+
+    def get_feature_point(self, image):
         """
         特征点检测&描述
         :param image: 检测图像
-        :param feature_methord: 检测方法 sift  or  surf
         :return:  kps:该图像的特征   features:图像特征点的描述符
         """
-        if feature_methord == "sift":
+        if self.feature_method == "sift":
             descriptor = cv2.xfeatures2d.SIFT_create()
-        elif feature_methord == "surf":
+        elif self.feature_method == "surf":
             descriptor = cv2.xfeatures2d.SURF_create()
-            # print("use surf")
         kps, features = descriptor.detectAndCompute(image, None)
         kps = np.float32([kp.pt for kp in kps])
         return kps, features
 
-    def match_descriptors(self, featuresA, featuresB, match_method):
+
+    def match_descriptors(self, featuresA, featuresB):
         '''
         功能：匹配特征点
         :param featuresA: 第一张图像的特征点描述符
@@ -128,7 +130,7 @@ class ImageMethod:
         :return:返回匹配的对数matches
         '''
         # 建立暴力匹配器
-        if match_method == "surf" or match_method == "sift":
+        if self.match_method == "surf" or self.match_method == "sift":
             matcher = cv2.DescriptorMatcher_create("BruteForce")
             # 使用KNN检测来自A、B图的SIFT特征匹配对，K=2，返回一个列表
             rawMatches = matcher.knnMatch(featuresA, featuresB, 2)
@@ -140,13 +142,13 @@ class ImageMethod:
                     matches.append((m[0].trainIdx, m[0].queryIdx))
         return matches
 
-    def get_offset_by_mode(self, kpsA, kpsB, matches, offsetEvaluate=3):
+
+    def get_offset_by_mode(self, kpsA, kpsB, matches):
         """
         功能：通过求众数的方法获得偏移量
         :param kpsA: 第一张图像的特征（原图）
         :param kpsB: 第二张图像的特征（测试图片）
         :param matches: 配准列表
-        :param offsetEvaluate: 如果众数的个数大于本阈值，则配准正确，默认为10
         :return: 返回(totalStatus, [dx, dy]), totalStatus 是否正确，[dx, dy]默认[0, 0]
         """
         totalStatus = True
@@ -184,11 +186,12 @@ class ImageMethod:
         num = zip_dict_sorted[list(zip_dict_sorted)[0]]
         # print("dx = " + str(dx) + ", dy = " + str(dy) + ", num = " + str(num))
 
-        if num < offsetEvaluate:
+        if num < self.offsetEvaluate:
             totalStatus = False
             print(str(num))
         # self.printAndWrite("  In Mode, The number of num is " + str(num) + " and the number of offsetEvaluate is "+str(offsetEvaluate))
         return (totalStatus, [dy, dx])  # opencv中处理图像的dx dy 与习惯是相反的  所以将两者调换位置
+
 
     def load_images(self, file_path):
         """
@@ -204,6 +207,7 @@ class ImageMethod:
                 image_list.append(image_read)
         return image_list
 
+
     def delete_test_data(self):
         """
         删除上次运行的结果文件
@@ -218,46 +222,47 @@ class ImageMethod:
         print("清除上次测试数据")
 
 
+    def calculate_random_offset(self):
+        """
+
+        :return:
+        """
+        match_mode_num = 0  # 通过众数计算得到的正确偏移量个数
+        match_offset_num = 0  # 计算结果与实际相同的结果个数
+        image_num = 55  # 需要的图像数量
+
+        img_clear = cv2.imread('clear_img.jpeg', flags=0)  # 单通道
+        img_offset, offset_data = method.add_random_offset(img_clear)
+        img_noise, gaussion_means, gaussion_sigma = method.add_random_gaussian_noise(img_offset)
+        clear_kps, clear_features = method.get_feature_point(img_clear)
+        print(2)
+        for i in range(image_num):
+            print("-------------------------------")
+            print("第" + str(i + 1) + "幅图片的实际偏移量为 ：" + str(offset_data[i]) + "   means : " + str(
+                gaussion_means[i]) + "  ----  sigma : " + str(gaussion_sigma[i]))
+            offset_kps_temp, offset_features_temp = method.get_feature_point(img_noise[i])
+            offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp)
+            total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
+            if total_status:
+                match_mode_num = match_mode_num + 1
+            if [dx, dy] == offset_data[i]:
+                match_offset_num = match_offset_num + 1
+                match_result = True
+            else:
+                match_result = False
+            print("第" + str(i + 1) + "张偏移图片匹配结果：", match_result, [dx, dy])
+
+        print("--------------------------------")
+        match_mode_percentage = match_mode_num / image_num
+        print('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
+
+        match_offset_percentage = match_offset_num / image_num
+        print('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
+
 
 if __name__ == "__main__":
     method = ImageMethod()
-    img_offset = []  # 添加偏移量的图片list
-    offset_data = []  # 偏移量list
-    gaussion_means = []
-    gaussion_sigma = []
-
-    match_mode_num = 0
-    match_offset_num = 0
-    offset_num = 55
-
     method.delete_test_data()
-
-    img_clear = cv2.imread('clear_img.jpeg', flags=0)  # 单通道
-    img_offset, offset_data = method.add_random_offset(img_clear)
-    img_noise, gaussion_means, gaussion_sigma = method.add_random_gaussian_noise(img_offset)
-    clear_kps, clear_features = method.get_feature_point(img_clear, "surf")
-    print(2)
-    for i in range(offset_num):
-        print("-------------------------------")
-        print("第" + str(i+1) + "幅图片的实际偏移量为 ：" + str(offset_data[i]) + "   means : " + str(gaussion_means[i]) + " sigma : " + str(gaussion_sigma[i]))
-        offset_kps_temp, offset_features_temp = method.get_feature_point(img_noise[i], "surf")
-        offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp, match_method="surf")
-        total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
-        if total_status:
-            match_mode_num = match_mode_num + 1
-        if [dx, dy] == offset_data[i]:
-            match_offset_num = match_offset_num + 1
-            match_result = True
-        else:
-            match_result = False
-        print("第" + str(i+1) + "张偏移图片匹配结果：", match_result, [dx, dy])
-
-    print("--------------------------------")
-    match_mode_percentage = match_mode_num / offset_num
-    print('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
-
-    match_offset_percentage = match_offset_num / offset_num
-    print('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
-
+    method.calculate_random_offset()
 
 
