@@ -19,20 +19,31 @@ import shutil
 
 class ImageMethod:
     searchRatio = 0.75  # 0.75 is common value for matches
+    image_noise_dir = "image_noise/"
+    image_offset_dir = "image_offset/"
+    image_offset_txt = "offset_data.txt"
 
-    def add_random_gaussian_noise(self, image, sigma):
+
+    def add_random_gaussian_noise(self, image):
         """
         添加高斯随机噪声
         :param image: 图像list
         :param sigma: 标准差
         :return: image_noise 添加高斯噪声后的图像list
         """
-        image_noise = image
-        image_dir = "image_noise/"
-        if not os.path.exists(image_dir):
-            os.mkdir(image_dir)
+        image_noise = image  # 读进来是uint8类型
+        gaussian_means = []
+        gaussian_sigma = []
+        if not os.path.exists(self.image_noise_dir):
+            os.mkdir(self.image_noise_dir)
+
         for k in range(len(image_noise)):
             means = np.mean(image_noise[k])
+            print("means is : " + str(means))
+            gaussian_means.append(means)
+            sigma = random.randint(0, 5)
+            print("sigma is : " + str(sigma))
+            gaussian_sigma.append(sigma)
             rows, cols = image_noise[k].shape[0:2]
             for i in range(rows):
                 for j in range(cols):  # 每一个点都增加高斯随机数
@@ -41,9 +52,9 @@ class ImageMethod:
                         image_noise[k][i, j] = 0
                     elif image_noise[k][i, j] > 255:
                         image_noise[k][i, j] = 255
-            image_path = image_dir + "img_" + str(k+1) + "_gaussian_noise_sigma_" + str(sigma) + ".jpeg"
+            image_path = self.image_noise_dir + "img_" + str(k+1) + "_gaussian_noise_sigma_" + str(sigma) + ".jpeg"
             cv2.imwrite(image_path, image_noise[k])
-        return image_noise
+        return image_noise, gaussian_means, gaussian_sigma
 
 
     def add_salt_pepper_noise(self, src, percetage):
@@ -75,9 +86,9 @@ class ImageMethod:
         img_offset = []  # 添加偏移后的图片列表
         offset_data = []  # 55张图片的偏移量列表
         offset_xy = []
-        image_dir = "image_offset/"
-        if not os.path.exists(image_dir):
-            os.mkdir(image_dir)
+        # image_dir = "image_offset/"
+        if not os.path.exists(self.image_offset_dir):
+            os.mkdir(self.image_offset_dir)
         f = open('offset_data.txt', 'a')
         for i in range(img_num):
             rand_x = random.randint(-25, 25)
@@ -88,7 +99,7 @@ class ImageMethod:
             offset_data.append(offset_xy[2*i:2*i+2])  # 将切片加入偏移量列表
             h = np.float32([[1, 0, rand_x], [0, 1, rand_y]])
             img_offset.append(cv2.warpAffine(image, h, (cols, rows)))
-            image_path = image_dir + "img_" + str(i+1) + "_offset_" + str(rand_x) + "_" + str(rand_y) + ".jpeg"
+            image_path = self.image_offset_dir + "img_" + str(i+1) + "_offset_" + str(rand_x) + "_" + str(rand_y) + ".jpeg"
             cv2.imwrite(image_path, img_offset[i])
         cv2.waitKey()
         return img_offset, offset_data
@@ -161,6 +172,12 @@ class ImageMethod:
         zip_list = list(zipped)
         zip_dict = dict((a, zip_list.count(a)) for a in zip_list)
         zip_dict_sorted = dict(sorted(zip_dict.items(), key=lambda x: x[1], reverse=True))
+        print("第1组偏移量：[" + str(list(zip_dict_sorted)[0][1]) + ", " + str(list(zip_dict_sorted)[0][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[0]]))
+        print("第2组偏移量：[" + str(list(zip_dict_sorted)[1][1]) + ", " + str(list(zip_dict_sorted)[1][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[1]]))
+        print("第3组偏移量：[" + str(list(zip_dict_sorted)[2][1]) + ", " + str(list(zip_dict_sorted)[2][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[2]]))
+        print("第4组偏移量：[" + str(list(zip_dict_sorted)[3][1]) + ", " + str(list(zip_dict_sorted)[3][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[3]]))
+        print("第5组偏移量：[" + str(list(zip_dict_sorted)[4][1]) + ", " + str(list(zip_dict_sorted)[4][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[4]]))
+        print("第6组偏移量：[" + str(list(zip_dict_sorted)[5][1]) + ", " + str(list(zip_dict_sorted)[5][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[5]]))
 
         dx = list(zip_dict_sorted)[0][0]
         dy = list(zip_dict_sorted)[0][1]
@@ -171,7 +188,7 @@ class ImageMethod:
             totalStatus = False
             print(str(num))
         # self.printAndWrite("  In Mode, The number of num is " + str(num) + " and the number of offsetEvaluate is "+str(offsetEvaluate))
-        return (totalStatus, [dy, dx])
+        return (totalStatus, [dy, dx])  # opencv中处理图像的dx dy 与习惯是相反的  所以将两者调换位置
 
     def load_images(self, file_path):
         """
@@ -187,51 +204,60 @@ class ImageMethod:
                 image_list.append(image_read)
         return image_list
 
+    def delete_test_data(self):
+        """
+        删除上次运行的结果文件
+        :return:
+        """
+        if os.path.exists(self.image_offset_dir):
+            shutil.rmtree(self.image_offset_dir)
+        if os.path.exists(self.image_noise_dir):
+            shutil.rmtree(self.image_noise_dir)
+        if os.path.exists(self.image_offset_txt):
+            os.remove(self.image_offset_txt)
+        print("清除上次测试数据")
+
+
 
 if __name__ == "__main__":
     method = ImageMethod()
     img_offset = []  # 添加偏移量的图片list
     offset_data = []  # 偏移量list
-    offset_matches = []  # 多种图像的匹配对数list
-    offset_kps = []  # 多张图像的特征点list
-    offset_features = []  # 多张图像的特征点的描述符
+    gaussion_means = []
+    gaussion_sigma = []
+
     match_mode_num = 0
     match_offset_num = 0
     offset_num = 55
-    image_offset_dir = "image_offset/"
-    image_offset_txt = "offset_data.txt"
 
-    # 删除上次运行的结果文件
-    if os.path.exists(image_offset_dir):
-        shutil.rmtree(image_offset_dir)
-    if os.path.exists(image_offset_txt):
-        os.remove(image_offset_txt)
-    img_clear = cv2.imread('clear_img.jpeg', flags=0)
+    method.delete_test_data()
 
-    # if os.path.exists(image_offset_dir):  # 不再重复添加偏移量 直接读取上次做好的图像集
-    #     img_offset = method.load_images("image_offset/")
-    # else:
-    #     img_offset, offset_data = method.add_random_offset(img_clear)  # 添加偏移的图片list
-
+    img_clear = cv2.imread('clear_img.jpeg', flags=0)  # 单通道
     img_offset, offset_data = method.add_random_offset(img_clear)
+    img_noise, gaussion_means, gaussion_sigma = method.add_random_gaussian_noise(img_offset)
     clear_kps, clear_features = method.get_feature_point(img_clear, "surf")
-
+    print(2)
     for i in range(offset_num):
-        # print("第" + str(i+1) + "幅图片的偏移量列表为：", offset_data[i])
-        offset_kps_temp, offset_features_temp = method.get_feature_point(img_offset[i], "surf")
+        print("-------------------------------")
+        print("第" + str(i+1) + "幅图片的实际偏移量为 ：" + str(offset_data[i]) + "   means : " + str(gaussion_means[i]) + " sigma : " + str(gaussion_sigma[i]))
+        offset_kps_temp, offset_features_temp = method.get_feature_point(img_noise[i], "surf")
         offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp, match_method="surf")
         total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
-        print("第" + str(i+1) + "张偏移图片匹配结果：", total_status, [dx, dy])
         if total_status:
             match_mode_num = match_mode_num + 1
         if [dx, dy] == offset_data[i]:
             match_offset_num = match_offset_num + 1
+            match_result = True
+        else:
+            match_result = False
+        print("第" + str(i+1) + "张偏移图片匹配结果：", match_result, [dx, dy])
 
+    print("--------------------------------")
     match_mode_percentage = match_mode_num / offset_num
-    print('通过众数计算偏移的结果正确率为：{:.2%}'.format(match_mode_percentage))
+    print('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
 
     match_offset_percentage = match_offset_num / offset_num
-    print('通过对比偏移量和计算结果的正确率为：{:.2%}'.format(match_offset_percentage))
+    print('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
 
 
 
