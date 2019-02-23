@@ -15,6 +15,7 @@ import numpy as np
 import random
 import os
 import shutil
+import datetime
 
 
 class ImageMethod:
@@ -31,33 +32,29 @@ class ImageMethod:
     def add_random_gaussian_noise(self, image):
         """
         添加高斯随机噪声
-        :param image: 图像list
-        :return: image_noise: 添加高斯噪声后的图像list     gaussian_means: 高斯噪声的均值list    gaussian_sigma: 高斯噪声的方差list
+        :param image: 图像list（55张）
+        :return: image_noise: 添加高斯噪声后的图像list     gaussian_sigma: 高斯噪声的方差list
         """
         image_noise = image  # 读进来是uint8类型
-        gaussian_means = []
         gaussian_sigma = []
         if not os.path.exists(self.image_noise_dir):
             os.mkdir(self.image_noise_dir)
-
         for k in range(self.image_num):
-            means = np.mean(image_noise[k])
-            print("means is : " + str(means))
-            gaussian_means.append(means)
-            sigma = random.randint(0, 5)
-            print("sigma is : " + str(sigma))
+            sigma = random.randint(0, 10)
+            # print("第" + str(k + 1) + "张图片的方差为 : " + str(sigma))
             gaussian_sigma.append(sigma)
             rows, cols = image_noise[k].shape[0:2]
+            image_noise[k] = image_noise[k] + np.random.randn(573, 759) * sigma  # 矩阵相加
             for i in range(rows):
-                for j in range(cols):  # 每一个点都增加高斯随机数
-                    image_noise[k][i, j] = image_noise[k][i, j] + random.gauss(means, sigma)
-                    if image_noise[k][i, j] < 0:
-                        image_noise[k][i, j] = 0
-                    elif image_noise[k][i, j] > 255:
-                        image_noise[k][i, j] = 255
+                for j in range(cols):  # 每一个点先检测像素值是否溢出  再进行赋值
+                    r1 = np.where((image_noise[k][i, j]) > 255, 255, (image_noise[k][i, j]))
+                    r2 = np.where((r1 < 0), 0, r1)
+                    image_noise[k][i, j] = np.round(r2)
+            image_noise_temp = image_noise[k].astype('uint8')  # 将 ndarray.float64 转换为 uint8
+            image_noise[k] = image_noise_temp
             image_path = self.image_noise_dir + "img_" + str(k+1) + "_gaussian_noise_sigma_" + str(sigma) + ".jpeg"
             cv2.imwrite(image_path, image_noise[k])
-        return image_noise, gaussian_means, gaussian_sigma
+        return image_noise, gaussian_sigma
 
 
     def add_salt_pepper_noise(self, src, percetage):
@@ -164,8 +161,8 @@ class ImageMethod:
             # dyList.append(int(round(ptA[1] - ptB[1])))
             if int(ptA[0] - ptB[0]) == 0 and int(ptA[1] - ptB[1]) == 0:
                 continue
-            dxList.append(int(ptB[0] - ptA[0]))
-            dyList.append(int(ptB[1] - ptA[1]))
+            dxList.append(int(round(ptB[0] - ptA[0])))  # 像素值四舍五入
+            dyList.append(int(round(ptB[1] - ptA[1])))
         if len(dxList) == 0:
             dxList.append(0)
             dyList.append(0)
@@ -174,12 +171,13 @@ class ImageMethod:
         zip_list = list(zipped)
         zip_dict = dict((a, zip_list.count(a)) for a in zip_list)
         zip_dict_sorted = dict(sorted(zip_dict.items(), key=lambda x: x[1], reverse=True))
-        print("第1组偏移量：[" + str(list(zip_dict_sorted)[0][1]) + ", " + str(list(zip_dict_sorted)[0][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[0]]))
-        print("第2组偏移量：[" + str(list(zip_dict_sorted)[1][1]) + ", " + str(list(zip_dict_sorted)[1][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[1]]))
-        print("第3组偏移量：[" + str(list(zip_dict_sorted)[2][1]) + ", " + str(list(zip_dict_sorted)[2][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[2]]))
-        print("第4组偏移量：[" + str(list(zip_dict_sorted)[3][1]) + ", " + str(list(zip_dict_sorted)[3][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[3]]))
-        print("第5组偏移量：[" + str(list(zip_dict_sorted)[4][1]) + ", " + str(list(zip_dict_sorted)[4][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[4]]))
-        print("第6组偏移量：[" + str(list(zip_dict_sorted)[5][1]) + ", " + str(list(zip_dict_sorted)[5][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[5]]))
+        # 输出几组偏移量观察一下
+        # print("第1组偏移量：[" + str(list(zip_dict_sorted)[0][1]) + ", " + str(list(zip_dict_sorted)[0][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[0]]))
+        # print("第2组偏移量：[" + str(list(zip_dict_sorted)[1][1]) + ", " + str(list(zip_dict_sorted)[1][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[1]]))
+        # print("第3组偏移量：[" + str(list(zip_dict_sorted)[2][1]) + ", " + str(list(zip_dict_sorted)[2][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[2]]))
+        # print("第4组偏移量：[" + str(list(zip_dict_sorted)[3][1]) + ", " + str(list(zip_dict_sorted)[3][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[3]]))
+        # print("第5组偏移量：[" + str(list(zip_dict_sorted)[4][1]) + ", " + str(list(zip_dict_sorted)[4][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[4]]))
+        # print("第6组偏移量：[" + str(list(zip_dict_sorted)[5][1]) + ", " + str(list(zip_dict_sorted)[5][0]) + "] num : " + str(zip_dict_sorted[list(zip_dict_sorted)[5]]))
 
         dx = list(zip_dict_sorted)[0][0]
         dy = list(zip_dict_sorted)[0][1]
@@ -229,17 +227,15 @@ class ImageMethod:
         """
         match_mode_num = 0  # 通过众数计算得到的正确偏移量个数
         match_offset_num = 0  # 计算结果与实际相同的结果个数
-        image_num = 55  # 需要的图像数量
 
         img_clear = cv2.imread('clear_img.jpeg', flags=0)  # 单通道
         img_offset, offset_data = method.add_random_offset(img_clear)
-        img_noise, gaussion_means, gaussion_sigma = method.add_random_gaussian_noise(img_offset)
+        img_noise, gaussian_sigma = method.add_random_gaussian_noise(img_offset)
         clear_kps, clear_features = method.get_feature_point(img_clear)
         print(2)
-        for i in range(image_num):
+        for i in range(self.image_num):
             print("-------------------------------")
-            print("第" + str(i + 1) + "幅图片的实际偏移量为 ：" + str(offset_data[i]) + "   means : " + str(
-                gaussion_means[i]) + "  ----  sigma : " + str(gaussion_sigma[i]))
+            print("第" + str(i + 1) + "幅图片的实际偏移量为 ：" + str(offset_data[i]) + "  ----  sigma : " + str(gaussian_sigma[i]))
             offset_kps_temp, offset_features_temp = method.get_feature_point(img_noise[i])
             offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp)
             total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
@@ -253,16 +249,19 @@ class ImageMethod:
             print("第" + str(i + 1) + "张偏移图片匹配结果：", match_result, [dx, dy])
 
         print("--------------------------------")
-        match_mode_percentage = match_mode_num / image_num
+        match_mode_percentage = match_mode_num / self.image_num
         print('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
 
-        match_offset_percentage = match_offset_num / image_num
+        match_offset_percentage = match_offset_num / self.image_num
         print('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
 
 
 if __name__ == "__main__":
+    starttime = datetime.datetime.now()
     method = ImageMethod()
     method.delete_test_data()
     method.calculate_random_offset()
+    endtime = datetime.datetime.now()
+    print(endtime - starttime)
 
 

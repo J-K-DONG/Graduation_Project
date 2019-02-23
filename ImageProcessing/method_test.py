@@ -56,8 +56,12 @@ if __name__ == "__main__":
     m = MethodTest()
     clear_img = "clear_img.jpeg"
     img = cv2.imread(clear_img, flags=0)
-    sigma = [1, 2, 5, 10, 15, 20, 25, 30]
-    means = np.mean(img)
-    # means = 0
-    for i in range(len(sigma)):
-        image_noise = m.add_random_gaussian_noise(img, means, sigma[i])
+    # sigma = [1, 2, 5, 10, 15, 20, 25, 30]
+    # means = np.mean(img)
+    # # means = 0
+    # for i in range(len(sigma)):
+    #     image_noise = m.add_random_gaussian_noise(img, means, sigma[i])
+
+    print(img[0, 0])
+    img[0, 0] = img[0, 0] + 256
+    print(img[0, 0])
