@@ -16,18 +16,53 @@ import random
 import os
 import shutil
 import datetime
+import ImageProcessing.ImageUtility as Utility
+import ImageProcessing.myGpuFeatures as myGpuFeatures
+import ImageProcessing.ImageFusion as ImageFusion
+import glob
+import time
 
 
-class ImageMethod:
-    searchRatio = 0.75  # 0.75 is common value for matches
-    image_noise_dir = "image_noise/"
-    image_offset_dir = "image_offset/"
-    image_offset_txt = "offset_data.txt"
-    image_num = 55
-    feature_method = "surf"
+class ImageMethod():
+
+    # image_noise_dir = "image_noise/"
+    # image_offset_dir = "image_offset/"
     match_method = "surf"
-    offsetEvaluate = 3
 
+    image_offset_txt = "offset_data.txt"
+
+    # 关于特征搜索的设置
+    feature_method = "surf"
+
+    # 关于特征配准的设置
+    offsetEvaluate = 3
+    searchRatio = 0.75  # 0.75 is common value for matches
+
+    # 关于融合方法的设置
+    fuse_method = "notFuse"
+
+    # 关于 GPU 加速的设置
+    isGPUAvailable = False
+
+    # 关于 GPU-SURF 的设置
+    surfHessianThreshold = 100.0
+    surfNOctaves = 4
+    surfNOctaveLayers = 3
+    surfIsExtended = True
+    surfKeypointsRatio = 0.01
+    surfIsUpright = False
+
+    # 关于 GPU-ORB 的设置
+    orbNfeatures = 5000
+    orbScaleFactor = 1.2
+    orbNlevels = 8
+    orbEdgeThreshold = 31
+    orbFirstLevel = 0
+    orbWTA_K = 2
+    orbPatchSize = 31
+    orbFastThreshold = 20
+    orbBlurForDescriptor = False
+    orbMaxDistance = 30
 
     def add_random_gaussian_noise(self, image):
         """
@@ -92,7 +127,7 @@ class ImageMethod:
         for i in range(self.image_num):
             rand_x = random.randint(-25, 25)
             rand_y = random.randint(-25, 25)
-            f.write("[" + str(rand_x) + ", " + str(rand_y) + "]\n")
+            f.write(str(rand_x) + "," + str(rand_y) + "\n")
             offset_xy.append(rand_x)
             offset_xy.append(rand_y)
             offset_data.append(offset_xy[2*i:2*i+2])  # 将切片加入偏移量列表
@@ -110,13 +145,42 @@ class ImageMethod:
         :param image: 检测图像
         :return:  kps:该图像的特征   features:图像特征点的描述符
         """
-        if self.feature_method == "sift":
-            descriptor = cv2.xfeatures2d.SIFT_create()
-        elif self.feature_method == "surf":
-            descriptor = cv2.xfeatures2d.SURF_create()
-        kps, features = descriptor.detectAndCompute(image, None)
-        kps = np.float32([kp.pt for kp in kps])
-        return kps, features
+        if self.isGPUAvailable == False: # CPU mode
+            if self.feature_method == "sift":
+                descriptor = cv2.xfeatures2d.SIFT_create()
+            elif self.feature_method == "surf":
+                descriptor = cv2.xfeatures2d.SURF_create()
+            elif self.feature_method == "orb":
+                descriptor = cv2.ORB_create(self.orbNfeatures, self.orbScaleFactor, self.orbNlevels, self.orbEdgeThreshold, self.orbFirstLevel, self.orbWTA_K, 0, self.orbPatchSize, self.orbFastThreshold)
+            # 检测SIFT特征点，并计算描述子
+            kps, features = descriptor.detectAndCompute(image, None)
+            # 将结果转换成NumPy数组
+            kps = np.float32([kp.pt for kp in kps])
+        else:                           # GPU mode
+            if self.feature_method == "sift":
+                # 目前GPU-SIFT尚未开发，先采用CPU版本的替代
+                descriptor = cv2.xfeatures2d.SIFT_create()
+                kps, features = descriptor.detectAndCompute(image, None)
+                kps = np.float32([kp.pt for kp in kps])
+            elif self.feature_method == "surf":
+                kps, features = self.np_to_kp_and_descriptors(myGpuFeatures.detectAndDescribeBySurf(image, self.surfHessianThreshold, self.surfNOctaves,self.surfNOctaveLayers, self.surfIsExtended, self.surfKeypointsRatio, self.surfIsUpright))
+            elif self.feature_method == "orb":
+                kps, features = self.np_to_kp_and_descriptors(myGpuFeatures.detectAndDescribeByOrb(image, self.orbNfeatures, self.orbScaleFactor, self.orbNlevels, self.orbEdgeThreshold, self.orbFirstLevel, self.orbWTA_K, 0, self.orbPatchSize, self.orbFastThreshold, self.orbBlurForDescriptor))
+        # 返回特征点集，及对应的描述特征
+        return (kps, features)
+
+
+    def np_to_kp_and_descriptors(self, array):
+        """
+        功能：将GPU返回的numpy数据转成相应格式的kps和descriptors
+        :param array:
+        :return:
+        """
+        kps = []
+        descriptors = array[:, :, 1]
+        for i in range(array.shape[0]):
+            kps.append([array[i, 0, 0], array[i, 1, 0]])
+        return (kps, descriptors)
 
 
     def match_descriptors(self, featuresA, featuresB):
@@ -191,6 +255,158 @@ class ImageMethod:
         return (totalStatus, [dy, dx])  # opencv中处理图像的dx dy 与习惯是相反的  所以将两者调换位置
 
 
+    def get_stitch_by_offset(self, fileList, is_image_available, offsetListOrigin):
+        '''
+        通过偏移量列表和文件列表得到最终的拼接结果
+        :param fileList: 图像列表
+        :param offsetListOrigin: 偏移量列表
+        :return: ndaarry，图像
+        '''
+        # 如果你不细心，不要碰这段代码
+        # 已优化到根据指针来控制拼接，CPU下最快了
+        dxSum = dySum = 0
+        imageList = []
+        # imageList.append(cv2.imread(fileList[0], 0))
+        imageList.append(cv2.imdecode(np.fromfile(fileList[0], dtype=np.uint8), cv2.IMREAD_GRAYSCALE))
+        resultRow = imageList[0].shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴
+        resultCol = imageList[0].shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴
+
+        rangeX = [[0, 0] for x in range(len(offsetListOrigin))]  # 主要用于记录X方向最大最小边界
+        rangeY = [[0, 0] for x in range(len(offsetListOrigin))]  # 主要用于记录Y方向最大最小边界
+        offsetList = offsetListOrigin.copy()
+        rangeX[0][1] = imageList[0].shape[0]
+        rangeY[0][1] = imageList[0].shape[1]
+
+        for i in range(1, len(offsetList)):
+            if is_image_available[i] is False:
+                continue
+            # self.printAndWrite("  stitching " + str(fileList[i]))
+            # 适用于流形拼接的校正,并更新最终图像大小
+            # tempImage = cv2.imread(fileList[i], 0)
+            tempImage = cv2.imdecode(np.fromfile(fileList[i], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+            # dxSum = dxSum + offsetList[i][0]
+            # dySum = dySum + offsetList[i][1]
+            dxSum = offsetList[i][0]
+            dySum = offsetList[i][1]
+            # self.printAndWrite("  The dxSum is " + str(dxSum) + " and the dySum is " + str(dySum))
+            if dxSum <= 0:
+                for j in range(0, i):
+                    offsetList[j][0] = offsetList[j][0] + abs(dxSum)
+                    rangeX[j][0] = rangeX[j][0] + abs(dxSum)
+                    rangeX[j][1] = rangeX[j][1] + abs(dxSum)
+                resultRow = resultRow + abs(dxSum)
+                rangeX[i][1] = resultRow
+                dxSum = rangeX[i][0] = offsetList[i][0] = 0
+            else:
+                offsetList[i][0] = dxSum
+                resultRow = max(resultRow, dxSum + tempImage.shape[0])
+                rangeX[i][1] = resultRow
+            if dySum <= 0:
+                for j in range(0, i):
+                    offsetList[j][1] = offsetList[j][1] + abs(dySum)
+                    rangeY[j][0] = rangeY[j][0] + abs(dySum)
+                    rangeY[j][1] = rangeY[j][1] + abs(dySum)
+                resultCol = resultCol + abs(dySum)
+                rangeY[i][1] = resultCol
+                dySum = rangeY[i][0] = offsetList[i][1] = 0
+            else:
+                offsetList[i][1] = dySum
+                resultCol = max(resultCol, dySum + tempImage.shape[1])
+                rangeY[i][1] = resultCol
+            imageList.append(tempImage)
+        stitchResult = np.zeros((resultRow, resultCol), np.int) - 1
+        print("  The rectified offsetList is " + str(offsetList))
+
+        # 如上算出各个图像相对于原点偏移量，并最终计算出输出图像大小，并构造矩阵，如下开始赋值
+        for i in range(0, len(offsetList)):
+            print("  stitching " + str(fileList[i]))
+            if i == 0:
+                stitchResult[offsetList[0][0]: offsetList[0][0] + imageList[0].shape[0],
+                offsetList[0][1]: offsetList[0][1] + imageList[0].shape[1]] = imageList[0]
+            else:
+                if self.fuse_method == "notFuse":
+                    # 适用于无图像融合，直接覆盖
+                    # self.printAndWrite("Stitch " + str(i+1) + "th, the roi_ltx is " + str(offsetList[i][0]) + " and the roi_lty is " + str(offsetList[i][1]))
+                    stitchResult[offsetList[i][0]: offsetList[i][0] + imageList[i].shape[0],
+                    offsetList[i][1]: offsetList[i][1] + imageList[i].shape[1]] = imageList[i]
+                else:
+                    # 适用于图像融合算法，切出 roiA 和 roiB 供图像融合
+                    minOccupyX = rangeX[i - 1][0]
+                    maxOccupyX = rangeX[i - 1][1]
+                    minOccupyY = rangeY[i - 1][0]
+                    maxOccupyY = rangeY[i - 1][1]
+                    # self.printAndWrite("Stitch " + str(i + 1) + "th, the offsetList[i][0] is " + str(
+                    #     offsetList[i][0]) + " and the offsetList[i][1] is " + str(offsetList[i][1]))
+                    # self.printAndWrite("Stitch " + str(i + 1) + "th, the minOccupyX is " + str(
+                    #     minOccupyX) + " and the maxOccupyX is " + str(maxOccupyX) + " and the minOccupyY is " + str(
+                    #     minOccupyY) + " and the maxOccupyY is " + str(maxOccupyY))
+                    roi_ltx = max(offsetList[i][0], minOccupyX)
+                    roi_lty = max(offsetList[i][1], minOccupyY)
+                    roi_rbx = min(offsetList[i][0] + imageList[i].shape[0], maxOccupyX)
+                    roi_rby = min(offsetList[i][1] + imageList[i].shape[1], maxOccupyY)
+                    # self.printAndWrite("Stitch " + str(i + 1) + "th, the roi_ltx is " + str(
+                    #     roi_ltx) + " and the roi_lty is " + str(roi_lty) + " and the roi_rbx is " + str(
+                    #     roi_rbx) + " and the roi_rby is " + str(roi_rby))
+                    roiImageRegionA = stitchResult[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
+                    stitchResult[offsetList[i][0]: offsetList[i][0] + imageList[i].shape[0],
+                    offsetList[i][1]: offsetList[i][1] + imageList[i].shape[1]] = imageList[i]
+                    roiImageRegionB = stitchResult[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
+                    stitchResult[roi_ltx:roi_rbx, roi_lty:roi_rby] = self.fuseImage([roiImageRegionA, roiImageRegionB],
+                                                                                    offsetListOrigin[i][0],
+                                                                                    offsetListOrigin[i][1])
+        stitchResult[stitchResult == -1] = 0
+        return stitchResult.astype(np.uint8)
+
+
+    def fuseImage(self, images, dx, dy):
+        (imageA, imageB) = images
+        # cv2.namedWindow("A", 0)
+        # cv2.namedWindow("B", 0)
+        # cv2.imshow("A", imageA.astype(np.uint8))
+        # cv2.imshow("B", imageB.astype(np.uint8))
+        fuseRegion = np.zeros(imageA.shape, np.uint8)
+        # imageA[imageA == 0] = imageB[imageA == 0]
+        # imageB[imageB == 0] = imageA[imageB == 0]
+        imageFusion = ImageFusion.ImageFusion()
+        if self.fuse_method == "notFuse":
+            imageB[imageA == -1] = imageB[imageA == -1]
+            imageA[imageB == -1] = imageA[imageB == -1]
+            fuseRegion = imageB
+        elif self.fuse_method == "average":
+            imageA[imageA == 0] = imageB[imageA == 0]
+            imageB[imageB == 0] = imageA[imageB == 0]
+            imageA[imageA == -1] = 0
+            imageB[imageB == -1] = 0
+            fuseRegion = imageFusion.fuseByAverage([imageA, imageB])
+        elif self.fuse_method == "maximum":
+            imageA[imageA == 0] = imageB[imageA == 0]
+            imageB[imageB == 0] = imageA[imageB == 0]
+            imageA[imageA == -1] = 0
+            imageB[imageB == -1] = 0
+            fuseRegion = imageFusion.fuseByMaximum([imageA, imageB])
+        elif self.fuse_method == "minimum":
+            imageA[imageA == 0] = imageB[imageA == 0]
+            imageB[imageB == 0] = imageA[imageB == 0]
+            imageA[imageA == -1] = 0
+            imageB[imageB == -1] = 0
+            fuseRegion = imageFusion.fuseByMinimum([imageA, imageB])
+        elif self.fuse_method == "fadeInAndFadeOut":
+            fuseRegion = imageFusion.fuseByFadeInAndFadeOut(images, dx, dy)
+        elif self.fuse_method == "trigonometric":
+            fuseRegion = imageFusion.fuseByTrigonometric(images, dx, dy)
+        elif self.fuse_method == "multiBandBlending":
+            imageA[imageA == 0] = imageB[imageA == 0]
+            imageB[imageB == 0] = imageA[imageB == 0]
+            imageA[imageA == -1] = 0
+            imageB[imageB == -1] = 0
+            # imageA = imageA.astye(np.uint8);  imageB = imageB.astye(np.uint8);
+            fuseRegion = imageFusion.fuseByMultiBandBlending([imageA, imageB])
+        elif self.fuse_method == "spatialFrequency":
+            fuseRegion = imageFusion.fuseBySpatialFrequency([imageA, imageB])
+        elif self.fuse_method == "optimalSeamLine":
+            fuseRegion = imageFusion.fuseByOptimalSeamLine(images, self.direction)
+        return fuseRegion
+
     def load_images(self, file_path):
         """
         读取文件路径下多张图像
@@ -228,39 +444,80 @@ class ImageMethod:
         match_mode_num = 0  # 通过众数计算得到的正确偏移量个数
         match_offset_num = 0  # 计算结果与实际相同的结果个数
 
-        img_clear = cv2.imread('clear_img.jpeg', flags=0)  # 单通道
-        img_offset, offset_data = method.add_random_offset(img_clear)
-        img_noise, gaussian_sigma = method.add_random_gaussian_noise(img_offset)
-        clear_kps, clear_features = method.get_feature_point(img_clear)
-        print(2)
-        for i in range(self.image_num):
+        # img_clear = cv2.imread('clear_img.jpeg', flags=0)  # 单通道
+        # img_offset, offset_data = self.add_random_offset(img_clear)
+        # img_noise, gaussian_sigma = self.add_random_gaussian_noise(img_offset)
+
+        images_address = glob.glob(os.path.join(os.path.join(os.getcwd(), "image_noise"), "*jpeg"))
+        img_noise = []
+        for i in range(0, len(images_address)):
+            img = cv2.imread(images_address[i], 0)
+            img_noise.append(img)
+
+        offset_data = []
+        offset_data.append([0, 0])
+        with open(self.image_offset_txt, 'r') as file_to_read:
+            while True:
+                lines = file_to_read.readline()  # 整行读取数据
+                if not lines:
+                    break
+                lines = lines.split("\n")[0]
+                offset_data.append([int(lines.split(",")[0]), int(lines.split(",")[1])])
+
+        imageA = img_noise[0]
+        kpsA, featuresA = self.get_feature_point(imageA)
+        offset_list = []
+        offset_list.append([0, 0])
+        is_image_available = []
+        is_image_available.append(True)
+
+        for i in range(1, len(img_noise)):
             print("-------------------------------")
-            print("第" + str(i + 1) + "幅图片的实际偏移量为 ：" + str(offset_data[i]) + "  ----  sigma : " + str(gaussian_sigma[i]))
-            offset_kps_temp, offset_features_temp = method.get_feature_point(img_noise[i])
-            offset_matches_temp = method.match_descriptors(clear_features, offset_features_temp)
-            total_status, [dx, dy] = method.get_offset_by_mode(clear_kps, offset_kps_temp, offset_matches_temp)
+            print("第" + str(i) + "幅图片的实际偏移量为 ：" + str(offset_data[i]))
+            kpsB, featuresB = self.get_feature_point(img_noise[i])
+            offset_matches_temp = self.match_descriptors(featuresA, featuresB)
+            total_status, [dx, dy] = self.get_offset_by_mode(kpsA, kpsB, offset_matches_temp)
             if total_status:
                 match_mode_num = match_mode_num + 1
+                is_image_available.append(True)
+                offset_list.append([dx, dy])
+            else:
+                is_image_available.append(False)
+                offset_list.append([0, 0])
+
             if [dx, dy] == offset_data[i]:
                 match_offset_num = match_offset_num + 1
                 match_result = True
             else:
                 match_result = False
-            print("第" + str(i + 1) + "张偏移图片匹配结果：", match_result, [dx, dy])
+            print("第" + str(i) + "张偏移图片匹配结果：", match_result, [dx, dy])
+        print(len(images_address))
+        print(images_address)
+        print(len(offset_list))
+        print(offset_list)
+        print(len(is_image_available))
+        print(is_image_available)
 
         print("--------------------------------")
-        match_mode_percentage = match_mode_num / self.image_num
+        match_mode_percentage = match_mode_num / (len(img_noise) - 1)
         print('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
 
-        match_offset_percentage = match_offset_num / self.image_num
+        match_offset_percentage = match_offset_num / (len(img_noise) - 1)
         print('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
 
+        # 拼接图像
+        print("start stitching")
+        start_time = time.time()
+        stitch_image = self.get_stitch_by_offset(images_address, is_image_available, offset_list)
+        end_time = time.time()
+        print("The time of fusing is {:.3f} \'s".format(end_time - start_time))
+        return stitch_image
 
 if __name__ == "__main__":
     starttime = datetime.datetime.now()
     method = ImageMethod()
-    method.delete_test_data()
-    method.calculate_random_offset()
+    stitch_image = method.calculate_random_offset()
+    cv2.imwrite("result.jpeg", stitch_image)
     endtime = datetime.datetime.now()
     print(endtime - starttime)
 

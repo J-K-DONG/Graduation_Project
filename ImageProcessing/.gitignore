@@ -1,0 +1,7 @@
+*.[jpeg]
+*.[txt]
+.idea/
+image_noise/
+image_offset/
+__pycache__/
+.pyc
