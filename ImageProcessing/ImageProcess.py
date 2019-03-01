@@ -269,11 +269,11 @@ class ImageMethod():
         result_row = images_list[0].shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴
         result_col = images_list[0].shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴
 
-        rangeX = [[0, 0] for x in range(len(offset_list_origin))]  # 主要用于记录X方向最小最大边界
-        rangeY = [[0, 0] for x in range(len(offset_list_origin))]  # 主要用于记录Y方向最小最大边界
+        # rangeX = [[0, 0] for x in range(len(offset_list_origin))]  # 主要用于记录X方向最小最大边界
+        # rangeY = [[0, 0] for x in range(len(offset_list_origin))]  # 主要用于记录Y方向最小最大边界
         offset_list = offset_list_origin.copy()
-        rangeX[0][1] = images_list[0].shape[0]
-        rangeY[0][1] = images_list[0].shape[1]
+        # rangeX[0][1] = images_list[0].shape[0]
+        # rangeY[0][1] = images_list[0].shape[1]
 
         low_dx, max_dx, low_dy, max_dy = 0, 0, 0, 0
 
@@ -284,30 +284,37 @@ class ImageMethod():
             temp_image = cv2.imdecode(np.fromfile(images_address_list[i], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
             dx = offset_list[i][0]
             dy = offset_list[i][1]
-            if dx < low_dx:
-                for j in range(0, i):
-                    offset_list[j][0] = offset_list[j][0] + abs(dx - low_dx)
-                result_row = result_row + abs(dx - low_dx)
-                offset_list[i][0] = 0
-                low_dx = dx
-            elif dx > max_dx:
-                result_row = result_row + abs(dx - max_dx)
-                offset_list[i][0] = dx + offset_list[0][0]
-                max_dx = dx
-            else:
-                offset_list[i][0] = dx + offset_list[0][0]
-            if dy < low_dy:
-                for j in range(0, i):
-                    offset_list[j][1] = offset_list[j][1] + abs(dy - low_dy)
-                result_col = result_col + abs(dy - low_dy)
-                offset_list[i][1] = 0
-                low_dy = dy
-            elif dy > max_dy:
-                result_col = result_col + abs(dy - max_dy)
-                offset_list[i][1] = dy + offset_list[0][1]
-                max_dy = dy
-            else:
-                offset_list[i][1] = dy + offset_list[0][1]
+            if dx <= 0:
+                if dx < low_dx:
+                    result_row = result_row + abs(dx - low_dx)
+                    low_dx = dx
+                offset_list[i][0] = abs(dx) + offset_list[0][0]
+            elif dx > 0:
+                if dx > max_dx:
+                    for j in range(0, i):
+                        offset_list[j][0] = offset_list[j][0] + abs(dx - max_dx)
+                    result_row = result_row + abs(dx - max_dx)
+                    offset_list[i][0] = 0
+                    max_dx = dx
+                else:
+                    offset_list[i][0] = dx - offset_list[0][0]
+            if dy <= 0:
+                if dy < low_dy:
+                    result_col = result_col + abs(dy - low_dy)
+                    offset_list[i][1] = abs(dy) + offset_list[0][1]
+                    low_dy = dy
+                offset_list[i][1] = abs(dy) + offset_list[0][1]
+            elif dy > 0:
+                if dy > max_dy:
+                    for j in range(0, i):
+                        offset_list[j][1] = offset_list[j][1] + abs(dy - max_dy)
+                    result_col = result_col + abs(dy - max_dy)
+                    max_dy = dy
+                    offset_list[i][1] = 0
+                else:
+                    offset_list[i][1] = dy - offset_list[0][0]
+
+
             images_list.append(temp_image)
             print(result_row, result_col)
             print("  The rectified offsetList is " + str(offset_list))
@@ -315,8 +322,7 @@ class ImageMethod():
 
 
         # 如上算出各个图像相对于原点偏移量，并最终计算出输出图像大小，并构造矩阵，如下开始赋值
-        stitch_result[offset_list[0][0]: offset_list[0][0] + images_list[0].shape[0],
-        offset_list[0][1]: offset_list[0][1] + images_list[0].shape[1]] = images_list[0]
+        stitch_result[offset_list[0][0]: offset_list[0][0] + images_list[0].shape[0], offset_list[0][1]: offset_list[0][1] + images_list[0].shape[1]] = images_list[0]
         for i in range(1, len(offset_list)):
             if is_image_available[i] is False:
                 continue
