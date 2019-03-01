@@ -35,7 +35,7 @@ class ImageMethod():
     feature_method = "surf"
 
     # 关于特征配准的设置
-    offsetEvaluate = 3
+    offsetEvaluate = 10
     searchRatio = 0.75  # 0.75 is common value for matches
 
     # 关于融合方法的设置
@@ -255,7 +255,7 @@ class ImageMethod():
         return (totalStatus, [dy, dx])  # opencv中处理图像的dx dy 与习惯是相反的  所以将两者调换位置
 
 
-    def get_stitch_by_offset(self, fileList, is_image_available, offsetListOrigin):
+    def get_stitch_by_offset(self, images_address_list, is_image_available, offset_list_origin):
         '''
         通过偏移量列表和文件列表得到最终的拼接结果
         :param fileList: 图像列表
@@ -264,98 +264,86 @@ class ImageMethod():
         '''
         # 如果你不细心，不要碰这段代码
         # 已优化到根据指针来控制拼接，CPU下最快了
-        dxSum = dySum = 0
-        imageList = []
-        # imageList.append(cv2.imread(fileList[0], 0))
-        imageList.append(cv2.imdecode(np.fromfile(fileList[0], dtype=np.uint8), cv2.IMREAD_GRAYSCALE))
-        resultRow = imageList[0].shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴
-        resultCol = imageList[0].shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴
+        images_list = []
+        images_list.append(cv2.imdecode(np.fromfile(images_address_list[0], dtype=np.uint8), cv2.IMREAD_GRAYSCALE))
+        result_row = images_list[0].shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴
+        result_col = images_list[0].shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴
 
-        rangeX = [[0, 0] for x in range(len(offsetListOrigin))]  # 主要用于记录X方向最大最小边界
-        rangeY = [[0, 0] for x in range(len(offsetListOrigin))]  # 主要用于记录Y方向最大最小边界
-        offsetList = offsetListOrigin.copy()
-        rangeX[0][1] = imageList[0].shape[0]
-        rangeY[0][1] = imageList[0].shape[1]
+        rangeX = [[0, 0] for x in range(len(offset_list_origin))]  # 主要用于记录X方向最小最大边界
+        rangeY = [[0, 0] for x in range(len(offset_list_origin))]  # 主要用于记录Y方向最小最大边界
+        offset_list = offset_list_origin.copy()
+        rangeX[0][1] = images_list[0].shape[0]
+        rangeY[0][1] = images_list[0].shape[1]
 
-        for i in range(1, len(offsetList)):
+        low_dx, max_dx, low_dy, max_dy = 0, 0, 0, 0
+
+        for i in range(1, len(offset_list)):
             if is_image_available[i] is False:
                 continue
-            # self.printAndWrite("  stitching " + str(fileList[i]))
             # 适用于流形拼接的校正,并更新最终图像大小
-            # tempImage = cv2.imread(fileList[i], 0)
-            tempImage = cv2.imdecode(np.fromfile(fileList[i], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
-            # dxSum = dxSum + offsetList[i][0]
-            # dySum = dySum + offsetList[i][1]
-            dxSum = offsetList[i][0]
-            dySum = offsetList[i][1]
-            # self.printAndWrite("  The dxSum is " + str(dxSum) + " and the dySum is " + str(dySum))
-            if dxSum <= 0:
+            temp_image = cv2.imdecode(np.fromfile(images_address_list[i], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+            dx = offset_list[i][0]
+            dy = offset_list[i][1]
+            if dx < low_dx:
                 for j in range(0, i):
-                    offsetList[j][0] = offsetList[j][0] + abs(dxSum)
-                    rangeX[j][0] = rangeX[j][0] + abs(dxSum)
-                    rangeX[j][1] = rangeX[j][1] + abs(dxSum)
-                resultRow = resultRow + abs(dxSum)
-                rangeX[i][1] = resultRow
-                dxSum = rangeX[i][0] = offsetList[i][0] = 0
+                    offset_list[j][0] = offset_list[j][0] + abs(dx - low_dx)
+                result_row = result_row + abs(dx - low_dx)
+                offset_list[i][0] = 0
+                low_dx = dx
+            elif dx > max_dx:
+                result_row = result_row + abs(dx - max_dx)
+                offset_list[i][0] = dx + offset_list[0][0]
+                max_dx = dx
             else:
-                offsetList[i][0] = dxSum
-                resultRow = max(resultRow, dxSum + tempImage.shape[0])
-                rangeX[i][1] = resultRow
-            if dySum <= 0:
+                offset_list[i][0] = dx + offset_list[0][0]
+            if dy < low_dy:
                 for j in range(0, i):
-                    offsetList[j][1] = offsetList[j][1] + abs(dySum)
-                    rangeY[j][0] = rangeY[j][0] + abs(dySum)
-                    rangeY[j][1] = rangeY[j][1] + abs(dySum)
-                resultCol = resultCol + abs(dySum)
-                rangeY[i][1] = resultCol
-                dySum = rangeY[i][0] = offsetList[i][1] = 0
+                    offset_list[j][1] = offset_list[j][1] + abs(dy - low_dy)
+                result_col = result_col + abs(dy - low_dy)
+                offset_list[i][1] = 0
+                low_dy = dy
+            elif dy > max_dy:
+                result_col = result_col + abs(dy - max_dy)
+                offset_list[i][1] = dy + offset_list[0][1]
+                max_dy = dy
             else:
-                offsetList[i][1] = dySum
-                resultCol = max(resultCol, dySum + tempImage.shape[1])
-                rangeY[i][1] = resultCol
-            imageList.append(tempImage)
-        stitchResult = np.zeros((resultRow, resultCol), np.int) - 1
-        print("  The rectified offsetList is " + str(offsetList))
+                offset_list[i][1] = dy + offset_list[0][1]
+            images_list.append(temp_image)
+            print(result_row, result_col)
+            print("  The rectified offsetList is " + str(offset_list))
+        stitch_result = np.zeros((result_row, result_col), np.int) - 1
+
 
         # 如上算出各个图像相对于原点偏移量，并最终计算出输出图像大小，并构造矩阵，如下开始赋值
-        for i in range(0, len(offsetList)):
-            print("  stitching " + str(fileList[i]))
-            if i == 0:
-                stitchResult[offsetList[0][0]: offsetList[0][0] + imageList[0].shape[0],
-                offsetList[0][1]: offsetList[0][1] + imageList[0].shape[1]] = imageList[0]
+        stitch_result[offset_list[0][0]: offset_list[0][0] + images_list[0].shape[0],
+        offset_list[0][1]: offset_list[0][1] + images_list[0].shape[1]] = images_list[0]
+        for i in range(1, len(offset_list)):
+            if is_image_available[i] is False:
+                continue
+            print("  stitching " + str(images_address_list[i]))
+            if self.fuse_method == "notFuse":
+                # 适用于无图像融合，直接覆盖
+                stitch_result[offset_list[i][0]: offset_list[i][0] + images_list[i].shape[0],
+                offset_list[i][1]: offset_list[i][1] + images_list[i].shape[1]] = images_list[i]
             else:
-                if self.fuse_method == "notFuse":
-                    # 适用于无图像融合，直接覆盖
-                    # self.printAndWrite("Stitch " + str(i+1) + "th, the roi_ltx is " + str(offsetList[i][0]) + " and the roi_lty is " + str(offsetList[i][1]))
-                    stitchResult[offsetList[i][0]: offsetList[i][0] + imageList[i].shape[0],
-                    offsetList[i][1]: offsetList[i][1] + imageList[i].shape[1]] = imageList[i]
-                else:
-                    # 适用于图像融合算法，切出 roiA 和 roiB 供图像融合
-                    minOccupyX = rangeX[i - 1][0]
-                    maxOccupyX = rangeX[i - 1][1]
-                    minOccupyY = rangeY[i - 1][0]
-                    maxOccupyY = rangeY[i - 1][1]
-                    # self.printAndWrite("Stitch " + str(i + 1) + "th, the offsetList[i][0] is " + str(
-                    #     offsetList[i][0]) + " and the offsetList[i][1] is " + str(offsetList[i][1]))
-                    # self.printAndWrite("Stitch " + str(i + 1) + "th, the minOccupyX is " + str(
-                    #     minOccupyX) + " and the maxOccupyX is " + str(maxOccupyX) + " and the minOccupyY is " + str(
-                    #     minOccupyY) + " and the maxOccupyY is " + str(maxOccupyY))
-                    roi_ltx = max(offsetList[i][0], minOccupyX)
-                    roi_lty = max(offsetList[i][1], minOccupyY)
-                    roi_rbx = min(offsetList[i][0] + imageList[i].shape[0], maxOccupyX)
-                    roi_rby = min(offsetList[i][1] + imageList[i].shape[1], maxOccupyY)
-                    # self.printAndWrite("Stitch " + str(i + 1) + "th, the roi_ltx is " + str(
-                    #     roi_ltx) + " and the roi_lty is " + str(roi_lty) + " and the roi_rbx is " + str(
-                    #     roi_rbx) + " and the roi_rby is " + str(roi_rby))
-                    roiImageRegionA = stitchResult[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
-                    stitchResult[offsetList[i][0]: offsetList[i][0] + imageList[i].shape[0],
-                    offsetList[i][1]: offsetList[i][1] + imageList[i].shape[1]] = imageList[i]
-                    roiImageRegionB = stitchResult[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
-                    stitchResult[roi_ltx:roi_rbx, roi_lty:roi_rby] = self.fuseImage([roiImageRegionA, roiImageRegionB],
-                                                                                    offsetListOrigin[i][0],
-                                                                                    offsetListOrigin[i][1])
-        stitchResult[stitchResult == -1] = 0
-        return stitchResult.astype(np.uint8)
+                # 适用于图像融合算法，切出 roiA 和 roiB 供图像融合
+                min_occupyX = rangeX[i - 1][0]
+                max_occupyX = rangeX[i - 1][1]
+                min_occupyY = rangeY[i - 1][0]
+                max_occupyY = rangeY[i - 1][1]
+                roi_ltx = max(offset_list[i][0], min_occupyX)
+                roi_lty = max(offset_list[i][1], min_occupyY)
+                roi_rbx = min(offset_list[i][0] + images_list[i].shape[0], max_occupyX)
+                roi_rby = min(offset_list[i][1] + images_list[i].shape[1], max_occupyY)
+                roi_regionA = stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
+                stitch_result[offset_list[i][0]: offset_list[i][0] + images_list[i].shape[0],
+                offset_list[i][1]: offset_list[i][1] + images_list[i].shape[1]] = images_list[i]
+                roi_regionB = stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
+                stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby] = self.fuseImage([roi_regionA, roi_regionB],
+                                                                                    offset_list_origin[i][0],
+                                                                                    offset_list_origin[i][1])
+        stitch_result[stitch_result == -1] = 0
+        return stitch_result.astype(np.uint8)
 
 
     def fuseImage(self, images, dx, dy):
@@ -407,6 +395,7 @@ class ImageMethod():
             fuseRegion = imageFusion.fuseByOptimalSeamLine(images, self.direction)
         return fuseRegion
 
+
     def load_images(self, file_path):
         """
         读取文件路径下多张图像
@@ -448,10 +437,10 @@ class ImageMethod():
         # img_offset, offset_data = self.add_random_offset(img_clear)
         # img_noise, gaussian_sigma = self.add_random_gaussian_noise(img_offset)
 
-        images_address = glob.glob(os.path.join(os.path.join(os.getcwd(), "image_noise"), "*jpeg"))
+        images_address_list = glob.glob(os.path.join(os.path.join(os.getcwd(), "image_noise"), "*jpeg"))
         img_noise = []
-        for i in range(0, len(images_address)):
-            img = cv2.imread(images_address[i], 0)
+        for i in range(0, len(images_address_list)):
+            img = cv2.imread(images_address_list[i], 0)
             img_noise.append(img)
 
         offset_data = []
@@ -491,8 +480,8 @@ class ImageMethod():
             else:
                 match_result = False
             print("第" + str(i) + "张偏移图片匹配结果：", match_result, [dx, dy])
-        print(len(images_address))
-        print(images_address)
+        print(len(images_address_list))
+        print(images_address_list)
         print(len(offset_list))
         print(offset_list)
         print(len(is_image_available))
@@ -508,7 +497,7 @@ class ImageMethod():
         # 拼接图像
         print("start stitching")
         start_time = time.time()
-        stitch_image = self.get_stitch_by_offset(images_address, is_image_available, offset_list)
+        stitch_image = self.get_stitch_by_offset(images_address_list, is_image_available, offset_list)
         end_time = time.time()
         print("The time of fusing is {:.3f} \'s".format(end_time - start_time))
         return stitch_image
@@ -520,5 +509,14 @@ if __name__ == "__main__":
     cv2.imwrite("result.jpeg", stitch_image)
     endtime = datetime.datetime.now()
     print(endtime - starttime)
+
+    # images_address_list = glob.glob(".\\image_noise\\*.jpeg")
+    # for i in range(len(images_address_list)):
+    #     image_name = images_address_list[i].split("\\")[-1]
+    #     image = cv2.imread(images_address_list[i], 0)
+    #     crop = image[100: image.shape[0] - 100, 100: image.shape[1] - 100]
+    #     cv2.imwrite(".\\crop_result\\" + image_name + ".jpeg", crop)
+
+
 
 
