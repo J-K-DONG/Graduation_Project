@@ -16,9 +16,9 @@ import random
 import os
 import shutil
 import datetime
-import ImageProcessing.ImageUtility as Utility
-import ImageProcessing.myGpuFeatures as myGpuFeatures
-import ImageProcessing.ImageFusion as ImageFusion
+import ImageUtility as Utility
+import myGpuFeatures as myGpuFeatures
+import ImageFusion as ImageFusion
 import glob
 import time
 
@@ -288,7 +288,9 @@ class ImageMethod():
                 if dx < low_dx:
                     result_row = result_row + abs(dx - low_dx)
                     low_dx = dx
-                offset_list[i][0] = abs(dx) + offset_list[0][0]
+                    offset_list[i][0] = abs(dx) + offset_list[0][0]
+                else:
+                    offset_list[i][0] =  abs(dx) - offset_list[0][0]
             elif dx > 0:
                 if dx > max_dx:
                     for j in range(0, i):
@@ -297,11 +299,10 @@ class ImageMethod():
                     offset_list[i][0] = 0
                     max_dx = dx
                 else:
-                    offset_list[i][0] = dx - offset_list[0][0]
+                    offset_list[i][0] = offset_list[0][0] - dx
             if dy <= 0:
                 if dy < low_dy:
                     result_col = result_col + abs(dy - low_dy)
-                    offset_list[i][1] = abs(dy) + offset_list[0][1]
                     low_dy = dy
                 offset_list[i][1] = abs(dy) + offset_list[0][1]
             elif dy > 0:
@@ -312,13 +313,13 @@ class ImageMethod():
                     max_dy = dy
                     offset_list[i][1] = 0
                 else:
-                    offset_list[i][1] = dy - offset_list[0][0]
+                    offset_list[i][1] = offset_list[0][1] - dy
 
 
             images_list.append(temp_image)
             print(result_row, result_col)
             print("  The rectified offsetList is " + str(offset_list))
-        stitch_result = np.zeros((result_row, result_col), np.int) - 1
+        stitch_result = np.ones((result_row, result_col), np.int) * 255
 
 
         # 如上算出各个图像相对于原点偏移量，并最终计算出输出图像大小，并构造矩阵，如下开始赋值

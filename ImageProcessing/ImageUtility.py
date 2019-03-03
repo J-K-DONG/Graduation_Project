@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import math
-import ImageProcessing.myGpuFeatures as myGpuFeatures
+import myGpuFeatures as myGpuFeatures
 import os
 from scipy.stats import mode
 import skimage.measure

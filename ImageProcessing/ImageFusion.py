@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import math
-import ImageProcessing.ImageUtility as Utility
+import ImageUtility as Utility
 
 
 class ImageFusion(Utility.Method):
