@@ -299,7 +299,7 @@ class ImageFusion(Utility.Method):
         (last_image, next_image) = images
         weight_matrix = self.get_spatial_frequency_matrix(images)
         fuse_region = last_image * weight_matrix + next_image * (1 - weight_matrix)
-        return fuse_region
+        return fuse_region.astype(np.uint8)
 
     def get_spatial_frequency_matrix(self, images):
         """
@@ -332,8 +332,8 @@ class ImageFusion(Utility.Method):
         fuse_lp = []
         for i in range(self.pyramid_level):
             fuse_lp.append(last_lp[i] * wm_gp[self.pyramid_level - i - 1] + next_lp[i] * (1 - wm_gp[self.pyramid_level - i - 1]))
-        result = self.reconstruct(fuse_lp)
-        return result
+        fuse_region = np.uint8(self.reconstruct(fuse_lp))
+        return fuse_region
 
     # # 权值矩阵归一化
     # def normalize_weight_mat(self, weight_mat):
