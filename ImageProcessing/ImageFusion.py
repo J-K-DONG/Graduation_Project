@@ -330,7 +330,7 @@ class ImageFusion(Utility.Method):
         wm_gp = self.get_gaussian_pyramid(weight_matrix)
         fuse_lp = []
         for i in range(self.pyramid_level):
-            fuse_lp.append(last_lp[i] * wm_gp[self.pyramid_level - i - 1] + 
+            fuse_lp.append(last_lp[i] * wm_gp[self.pyramid_level - i - 1] +
                            next_lp[i] * (1 - wm_gp[self.pyramid_level - i - 1]))
         fuse_region = np.uint8(self.reconstruct(fuse_lp))
         return fuse_region
