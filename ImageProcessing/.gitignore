@@ -1,7 +1,6 @@
 *.[jpeg]
 *.[txt]
 .idea/
-image_noise/
-image_offset/
+random_images/
 __pycache__/
 .pyc
