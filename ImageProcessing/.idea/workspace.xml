@@ -25,8 +25,8 @@
       <file leaf-file-name="ImageProcess.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ImageProcess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="554" column="32" selection-start-line="554" selection-start-column="8" selection-end-line="554" selection-end-column="32" />
+            <state relative-caret-position="365">
+              <caret line="522" lean-forward="true" selection-start-line="522" selection-end-line="522" />
               <folding>
                 <element signature="e#152#162#0" expanded="true" />
                 <element signature="e#2138#4068#0" />
@@ -307,7 +307,7 @@
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49785408" visible="true" weight="0.5286444" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1003861" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.034749035" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -433,8 +433,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ImageProcess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="554" column="32" selection-start-line="554" selection-start-column="8" selection-end-line="554" selection-end-column="32" />
+        <state relative-caret-position="365">
+          <caret line="522" lean-forward="true" selection-start-line="522" selection-end-line="522" />
           <folding>
             <element signature="e#152#162#0" expanded="true" />
             <element signature="e#2138#4068#0" />
