@@ -315,7 +315,6 @@ class ImageFusion(Utility.Method):
             pass
         return weight_matrix
 
-
     def fuse_by_sf_and_mbb(self, images):
         """
         多分辨率样条和空间频率融合叠加,空间频率生成的权值矩阵，生成高斯金字塔然后与拉普拉斯金字塔结合，
@@ -331,7 +330,8 @@ class ImageFusion(Utility.Method):
         wm_gp = self.get_gaussian_pyramid(weight_matrix)
         fuse_lp = []
         for i in range(self.pyramid_level):
-            fuse_lp.append(last_lp[i] * wm_gp[self.pyramid_level - i - 1] + next_lp[i] * (1 - wm_gp[self.pyramid_level - i - 1]))
+            fuse_lp.append(last_lp[i] * wm_gp[self.pyramid_level - i - 1] + 
+                           next_lp[i] * (1 - wm_gp[self.pyramid_level - i - 1]))
         fuse_region = np.uint8(self.reconstruct(fuse_lp))
         return fuse_region
 
