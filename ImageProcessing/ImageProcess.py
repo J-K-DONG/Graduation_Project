@@ -100,7 +100,6 @@ class ImageTrack(Utility.Method):
         sigma_list = []
         roi_length = 50
 
-        # 第一张无噪声无位移图像先保存
         for k in range(0, image_num + 1):
             random_image = input_image.copy()
             if k == 0:
