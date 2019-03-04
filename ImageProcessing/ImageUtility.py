@@ -14,6 +14,11 @@ class Method:
     is_print_screen = True
 
     def print_and_log(self, content):
+        """
+        向屏幕或者txt打印信息
+        :param content:
+        :return:
+        """
         if self.is_print_screen:
             print(content)
         if self.is_out_log_file:
@@ -24,6 +29,11 @@ class Method:
 
     @staticmethod
     def make_out_dir(dir_path):
+        """
+        创造一个文件夹
+        :param dir_path:文件夹目录
+        :return:
+        """
         try:
             os.makedirs(dir_path)
         except OSError:
@@ -31,6 +41,11 @@ class Method:
 
     @staticmethod
     def delete_files_in_folder(dir_address):
+        """
+        删除一个文件夹下所有文件
+        :param dir_address: 文件夹目录
+        :return:
+        """
         file_list = os.listdir(dir_address)
         file_num = len(file_list)
         if file_num != 0:
@@ -41,25 +56,16 @@ class Method:
 
     @staticmethod
     def resize_image(origin_image, resize_times, inter_method=cv2.INTER_AREA):
+        """
+        缩放图像
+        :param origin_image:原始图像
+        :param resize_times: 缩放比率
+        :param inter_method: 插值方法
+        :return: 缩放结果
+        """
         (h, w) = origin_image.shape
         resize_h = int(h * resize_times)
         resize_w = int(w * resize_times)
         # cv2.INTER_AREA是测试后最好的方法
         resized_image = cv2.resize(origin_image, (resize_w, resize_h), interpolation=inter_method)
         return resized_image
-
-    @staticmethod
-    def compare_result_gt(stitch_image, gt_image):
-        assert stitch_image.shape == gt_image.shape, "The shape of two image is not same"
-        mse_score = skimage.measure.compare_mse(stitch_image, gt_image)
-        psnr_score = skimage.measure.compare_psnr(stitch_image, gt_image)
-        ssim_score = skimage.measure.compare_ssim(stitch_image, gt_image)
-        print(" The mse is {}, psnr is {}, ssim is {}".format(mse_score, psnr_score, ssim_score))
-
-
-if __name__ == "__main__":
-    # 根据图像生成视频
-    image = cv2.imread("stitching_by_human.png")
-    project_address = os.getcwd()
-    method = Method()
-    method.generate_video_from_image(image, os.path.join(project_address, "result"))
