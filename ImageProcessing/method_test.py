@@ -140,7 +140,7 @@ class MethodTest:
                                      (1, 0, 1),
                                      (1, 1, 1)])
         if isGPUAvailable:
-            fuseRegion = 0
+            fuse_region = 0
         else:
             row_num = row // block_size
             col_num = col // block_size

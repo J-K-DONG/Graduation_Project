@@ -204,16 +204,15 @@ class ImageTrack(Utility.Method):
         block_size = 200
         sigma = 20
         temp = random.randint(0, 3)
-        # temp = 0
         row, col = input_img.shape[0:2]
         if temp is 0:
             flag = True
             dx = random.randint(0, row - block_size)
             dy = random.randint(0, col - block_size)
             img_block = cv2.GaussianBlur(input_img[dx:dx + block_size, dy:dy + block_size], kernel_size, sigma)
-            print(img_block)
-            print(img_block.shape[0:2])
-            print(dx, dy)
+            # print(img_block)
+            # print(img_block.shape[0:2])
+            # print(dx, dy)
             input_img[dx:dx + block_size, dy:dy + block_size] = img_block
         return input_img, flag, dx, dy
 
@@ -224,13 +223,6 @@ class ImageTrack(Utility.Method):
         """
         self.print_and_log("Start tracking")
         self.images_address_list = glob.glob(os.path.join(self.images_dir, "*.jpeg"))
-        # for filename in glob.glob(r'/Users/jkdong/PycharmProjects/ImageProcessing/random_images/*.jpeg'):
-        #     print(filename)
-        # print(1)
-        # for i in range(len(self.images_address_list)):
-        #     print(self.images_address_list[i])
-        # print(self.images_dir)
-
         match_mode_num = 0  # 通过众数计算得到的正确偏移量个数
         match_offset_num = 0  # 计算结果与实际相同的结果个数
 
