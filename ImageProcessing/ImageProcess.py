@@ -105,12 +105,14 @@ class ImageTrack(Utility.Method):
                 offset = [0, 0]
                 sigma = 0
                 flag = False
+                dx_blur = 0
+                dy_blur = 0
             else:
                 # 增加随机偏移
                 random_image, offset = self.add_random_offset(random_image)
 
                 # 增加随机高斯噪声
-                random_image, sigma = self.add_random_gaussian_noise(random_image)
+                # random_image, sigma = self.add_random_gaussian_noise(random_image)
 
                 # # 增加随机椒盐噪声
                 # random_image = self.add_salt_pepper_noise(random_image)
@@ -242,7 +244,7 @@ class ImageTrack(Utility.Method):
                 lines = lines.split("\n")[0]
                 gt_offset.append([int(lines.split(",")[0]), int(lines.split(",")[1])])  # 以'，'为分割符 分为前后两个字符
 
-        print(gt_offset)
+        # print(gt_offset)
         last_image = cv2.imdecode(np.fromfile(self.images_address_list[0], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
         self.image_shape = last_image.shape  # 695 * 531
         last_kps, last_features = self.calculate_feature(last_image)  # 第000张图像
@@ -276,7 +278,7 @@ class ImageTrack(Utility.Method):
         match_offset_percentage = match_offset_num / (len(self.images_address_list) - 1)
         self.print_and_log('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
 
-        print(self.offset_list)
+        # print(self.offset_list)
         # 拼接图像
         print("Start stitching")
         start_time = time.time()
@@ -338,13 +340,9 @@ class ImageTrack(Utility.Method):
         min_dx, min_dy = 0, 0
         result_row = self.image_shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴 695
         result_col = self.image_shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴 531
-        print(1)
-        print(self.offset_list)
         self.offset_list.insert(0, [0, 0])  # 增加第一张图像相对于最终结果的原点的偏移量
-        print(self.offset_list)
         temp_offset_list = self.offset_list.copy()
         offset_list_origin = self.offset_list.copy()
-        print(self.is_available_list)
         for i in range(1, len(temp_offset_list)):
             if self.is_available_list[i] is False:
                 continue
@@ -407,7 +405,6 @@ class ImageTrack(Utility.Method):
                         self.offset_list[i][1]: self.offset_list[i][1] + image.shape[1]] = image
                     # 再切出来感兴趣区域 next_roi_fuse_region
                     next_roi_fuse_region = stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
-                    print(next_roi_fuse_region.shape[0:2])
                     # 融合后再放到该位置
                     stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby] = self.fuse_image(
                         [last_roi_fuse_region, next_roi_fuse_region],
@@ -433,6 +430,7 @@ class ImageTrack(Utility.Method):
             next_rfr[next_rfr == 0] = last_rfr[next_rfr == 0]
         fuse_region = np.zeros(last_rfr.shape, np.uint8)
         image_fusion = ImageFusion.ImageFusion()
+        print(self.fuse_method)
         if self.fuse_method == "notFuse":
             fuse_region = next_rfr
         elif self.fuse_method == "average":
@@ -446,11 +444,11 @@ class ImageTrack(Utility.Method):
         elif self.fuse_method == "trigonometric":
             fuse_region = image_fusion.fuse_by_trigonometric(overlap_rfrs, dx, dy)
         elif self.fuse_method == "multiBandBlending":
+            print(1)
             fuse_region = image_fusion.fuse_by_multi_band_blending([last_rfr, next_rfr])
         elif self.fuse_method == "spatialFrequency":
             fuse_region = image_fusion.fuse_by_spatial_frequency([last_rfr, next_rfr])
         elif self.fuse_method == "spatialFrequencyAndMultiBandBlending":
-            print(123)
             fuse_region = image_fusion.fuse_by_sf_and_mbb([last_rfr, next_rfr])
         return fuse_region
 

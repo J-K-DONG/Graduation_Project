@@ -9,8 +9,8 @@ if __name__ == "__main__":
     # fuse_method = "multiBandBlending"
     # fuse_method = "fadeInAndFadeOut"
     # fuse_method = "notFuse"
-    fuse_method = "spatialFrequency"
-    # fuse_method = "spatialFrequencyAndMultiBandBlending"
+    # fuse_method = "spatialFrequency"
+    fuse_method = "spatialFrequencyAndMultiBandBlending"
     tracker = ImageTrack(os.path.join(project_address, "random_images"), fuse_method=fuse_method)
     tracked_image = tracker.start_track_and_fuse()
     end_time = datetime.datetime.now()

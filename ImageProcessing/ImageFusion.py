@@ -346,8 +346,7 @@ class ImageFusion(Utility.Method):
             row_num = row // block_size
             col_num = col // block_size
             fusion_choice = np.ones((row_num + 1, col_num + 1), dtype=np.int)
-            print(fusion_choice)
-            print("图像共分为 " + str(row_num + 1) + " 行 " + str(col_num + 1) + " 列")
+            # print("图像共分为 " + str(row_num + 1) + " 行 " + str(col_num + 1) + " 列")
             for i in range(row_num + 1):
                 for j in range(col_num + 1):  # 图像切片比较
                     if i < row_num and j < col_num:
@@ -380,20 +379,16 @@ class ImageFusion(Utility.Method):
 
                     # 用 3 * 3 的 majority filter 过滤一遍
                     if i > 1 and j > 1:
-                        print("start filter:")
                         if np.all(fusion_choice[(i - 2):(i + 1), (j - 2):(j + 1)] == choice_full_zeros):  # 取全0
-                            print("满足010")
+                            # print("满足010")
                             fusion_choice[i - 1, j - 1] = 0
                             weight_matrix[(i - 1) * block_size:i * block_size, (j - 1) * block_size:j * block_size] = \
                                 np.zeros((block_size, block_size))
                         elif np.all(fusion_choice[(i - 2):(i + 1), (j - 2):(j + 1)] == choice_full_ones):  # 取全1
-                            print("满足101")
+                            # print("满足101")
                             fusion_choice[i - 1, j - 1] = 1
                             weight_matrix[(i - 1) * block_size:i * block_size, (j - 1) * block_size:j * block_size] = \
                                 np.ones((block_size, block_size))
-            # print(fusion_choice)
-            # print(111)
-            # print(weight_matrix)
         return weight_matrix
 
     def fuse_by_sf_and_mbb(self, images):
