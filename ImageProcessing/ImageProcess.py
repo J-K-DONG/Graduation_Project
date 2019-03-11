@@ -15,7 +15,7 @@ import numpy as np
 import random
 import os
 import ImageUtility as Utility
-import myGpuFeatures as myGpuFeatures
+# import myGpuFeatures as myGpuFeatures
 import ImageFusion as ImageFusion
 import glob
 import time
@@ -37,7 +37,7 @@ class ImageTrack(Utility.Method):
         # 关于录入文件的设置
         self.images_dir = images_dir
         self.image_shape = None
-        self.offset_list = []
+        self.offset_list = []  # 图像偏移的真实结果
         self.is_available_list = []
         self.images_address_list = None
 
@@ -93,7 +93,6 @@ class ImageTrack(Utility.Method):
             os.remove(os.path.join(os.getcwd(), "offset_data.txt"))
 
         f = open('offset_data.txt', 'a')
-
         self.print_and_log("Generating images")
         names_list = []
         offset_list = []
@@ -105,8 +104,9 @@ class ImageTrack(Utility.Method):
             if k == 0:
                 offset = [0, 0]
                 sigma = 0
+                flag = False
             else:
-                # 增加随机位移
+                # 增加随机偏移
                 random_image, offset = self.add_random_offset(random_image)
 
                 # 增加随机高斯噪声
@@ -114,6 +114,9 @@ class ImageTrack(Utility.Method):
 
                 # # 增加随机椒盐噪声
                 # random_image = self.add_salt_pepper_noise(random_image)
+
+                # 增加随机高斯模糊
+                random_image, flag, dx_blur, dy_blur = self.add_gaussian_blur(random_image)
 
             offset_list.append(offset)
             sigma_list.append(sigma)
@@ -124,72 +127,15 @@ class ImageTrack(Utility.Method):
             random_image = random_image[roi_length: height - roi_length, roi_length: width - roi_length]
 
             # 命名并保存
-            image_name = "img_" + str(k).zfill(3) + "_gaussian_noise_sigma_" + str(sigma) + \
-                         "_offset_" + str(offset[0]) + "_" + str(offset[1]) + ".jpeg"
+            image_name = "img_" + str(k).zfill(3) + "_gaussian_noise_sigma_" + str(sigma) + "_offset_" + str(offset[0])\
+                         + "_" + str(offset[1])
+            image_name_blur = "_Gaussian_blur_" + str(dx_blur) + "_" + str(dy_blur) + ".jpeg" if flag else ".jpeg"
+            image_name = image_name + image_name_blur
             names_list.append(image_name)
             cv2.imwrite(os.path.join(self.images_dir, image_name), random_image)
             self.print_and_log(" generate {}".format(image_name))
         f.close()
         self.print_and_log("generate done")
-
-    def start_track_and_fuse(self):
-        """
-        开始追踪
-        :return:返回追踪和融合结果图
-        """
-        self.print_and_log("Start tracking")
-        self.images_address_list = glob.glob(os.path.join(self.images_dir, "*.jpeg"))
-        match_mode_num = 0  # 通过众数计算得到的正确偏移量个数
-        match_offset_num = 0  # 计算结果与实际相同的结果个数
-
-        # 读取gt_offset
-        gt_offset = []
-        with open("offset_data.txt", 'r') as file_to_read:
-            while True:
-                lines = file_to_read.readline()  # 整行读取数据
-                if not lines:
-                    break
-                lines = lines.split("\n")[0]
-                gt_offset.append([int(lines.split(",")[0]), int(lines.split(",")[1])])
-        last_image = cv2.imdecode(np.fromfile(self.images_address_list[0], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
-        self.image_shape = last_image.shape
-        last_kps, last_features = self.calculate_feature(last_image)
-        self.last_image_feature.kps = last_kps
-        self.last_image_feature.features = last_features
-        self.is_available_list.append(True)
-        start_time = time.time()
-        for i in range(1, len(self.images_address_list)):
-            next_image = cv2.imdecode(np.fromfile(self.images_address_list[i], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
-            total_status, offset = self.calculate_offset_by_feature(next_image)
-            if total_status:
-                match_mode_num = match_mode_num + 1
-                self.is_available_list.append(True)
-                self.offset_list.append(offset)
-            else:
-                self.is_available_list.append(False)
-                self.offset_list.append([0, 0])
-            if offset == gt_offset[i]:
-                match_offset_num = match_offset_num + 1
-                match_result = True
-            else:
-                match_result = False
-            self.print_and_log("第{}张偏移图片匹配结果：{}, 真实值：{}， 计算值：{}".format(i, match_result, gt_offset[i], offset))
-        end_time = time.time()
-        self.print_and_log("The time of matching is {:.3f} \'s".format(end_time - start_time))
-        self.print_and_log("--------------------------------")
-        match_mode_percentage = match_mode_num / (len(self.images_address_list) - 1)
-        self.print_and_log('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
-
-        match_offset_percentage = match_offset_num / (len(self.images_address_list) - 1)
-        self.print_and_log('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
-
-        # 拼接图像
-        print("Start stitching")
-        start_time = time.time()
-        tracked_image = self.get_stitch_by_offset()
-        end_time = time.time()
-        print("The time of fusing is {:.3f} \'s".format(end_time - start_time))
-        return tracked_image
 
     @staticmethod
     def add_random_offset(input_image):
@@ -241,85 +187,103 @@ class ImageTrack(Utility.Method):
             else:
                 random_noise_image[rand_x, rand_y] = 255  # 将该点变为白点
         return random_noise_image
-    # def add_random_gaussian_noise1(self, image):
-    #     """
-    #     添加高斯随机噪声
-    #     :param image: 图像list（55张）
-    #     :return: image_noise: 添加高斯噪声后的图像list     gaussian_sigma: 高斯噪声的方差list
-    #     """
-    #     image_noise = image  # 读进来是uint8类型
-    #     gaussian_sigma = []
-    #     if not os.path.exists(self.image_noise_dir):
-    #         os.mkdir(self.image_noise_dir)
-    #     for k in range(self.image_num):
-    #         sigma = random.randint(0, 10)
-    #         # print("第" + str(k + 1) + "张图片的方差为 : " + str(sigma))
-    #         gaussian_sigma.append(sigma)
-    #         rows, cols = image_noise[k].shape[0:2]
-    #         image_noise[k] = image_noise[k] + np.random.randn(573, 759) * sigma  # 矩阵相加
-    #         for i in range(rows):
-    #             for j in range(cols):  # 每一个点先检测像素值是否溢出  再进行赋值
-    #                 r1 = np.where((image_noise[k][i, j]) > 255, 255, (image_noise[k][i, j]))
-    #                 r2 = np.where((r1 < 0), 0, r1)
-    #                 image_noise[k][i, j] = np.round(r2)
-    #         image_noise_temp = image_noise[k].astype('uint8')  # 将 ndarray.float64 转换为 uint8
-    #         image_noise[k] = image_noise_temp
-    #         image_path = self.image_noise_dir + "img_" + str(k+1) + "_gaussian_noise_sigma_" + str(sigma) + ".jpeg"
-    #         cv2.imwrite(image_path, image_noise[k])
-    #     return image_noise, gaussian_sigma
 
+    @staticmethod
+    def add_gaussian_blur(input_img):
+        """
+        在随机区域添加高斯模糊
+        :param input_img:
+        :return:
+        """
+        dx = 0
+        dy = 0
+        flag = False
+        kernel_size = (5, 5)
+        block_size = 200
+        sigma = 20
+        temp = random.randint(0, 3)
+        # temp = 0
+        row, col = input_img.shape[0:2]
+        if temp is 0:
+            flag = True
+            dx = random.randint(0, row - block_size)
+            dy = random.randint(0, col - block_size)
+            img_block = cv2.GaussianBlur(input_img[dx:dx + block_size, dy:dy + block_size], kernel_size, sigma)
+            print(img_block)
+            print(img_block.shape[0:2])
+            print(dx, dy)
+            input_img[dx:dx + block_size, dy:dy + block_size] = img_block
+        return input_img, flag, dx, dy
 
+    def start_track_and_fuse(self):
+        """
+        开始追踪
+        :return:返回追踪和融合结果图
+        """
+        self.print_and_log("Start tracking")
+        self.images_address_list = glob.glob(os.path.join(self.images_dir, "*.jpeg"))
+        # for filename in glob.glob(r'/Users/jkdong/PycharmProjects/ImageProcessing/random_images/*.jpeg'):
+        #     print(filename)
+        # print(1)
+        # for i in range(len(self.images_address_list)):
+        #     print(self.images_address_list[i])
+        # print(self.images_dir)
 
-    # def add_random_offset1(self, image):
-    #     """
-    #     为多张图像添加随机偏移 并保存偏移的图片和每张图片的偏移量
-    #     :param image: 图像list
-    #     :return:  img_offset:添加偏移量的图像list   offset_data:所有图像的偏移量list [[rand_x, rand_y],[rand_x, rand_y]...]
-    #     """
-    #     rows, cols = image.shape[0:2]
-    #     img_offset = []  # 添加偏移后的图片列表
-    #     offset_data = []  # 55张图片的偏移量列表
-    #     offset_xy = []
-    #     for i in range(self.image_num):
-    #         rand_x = random.randint(-25, 25)
-    #         rand_y = random.randint(-25, 25)
-    #         f.write(str(rand_x) + "," + str(rand_y) + "\n")
-    #         offset_xy.append(rand_x)
-    #         offset_xy.append(rand_y)
-    #         offset_data.append(offset_xy[2*i:2*i+2])  # 将切片加入偏移量列表
-    #         h = np.float32([[1, 0, rand_x], [0, 1, rand_y]])
-    #         img_offset.append(cv2.warpAffine(image, h, (cols, rows)))
-    #         image_path = self.image_offset_dir + "img_" + str(i+1) + "_offset_" + str(rand_x) + "_" + str(rand_y) + ".jpeg"
-    #         cv2.imwrite(image_path, img_offset[i])
-    #     cv2.waitKey()
-    #     return img_offset, offset_data
+        match_mode_num = 0  # 通过众数计算得到的正确偏移量个数
+        match_offset_num = 0  # 计算结果与实际相同的结果个数
 
-    # def load_images(self, file_path):
-    #     """
-    #     读取文件路径下多张图像
-    #     :param file_path: 读入文件的相对路径
-    #     :return: image_list: 多张图像的list
-    #     """
-    #     image_list = []
-    #     if os.path.exists(file_path):
-    #         for img_name in os.listdir(file_path):
-    #             image_dir = file_path + str(img_name)
-    #             image_read = cv2.imread(image_dir, flags=0)
-    #             image_list.append(image_read)
-    #     return image_list
+        # 读取gt_offset
+        gt_offset = []
+        with open("offset_data.txt", 'r') as file_to_read:
+            while True:
+                lines = file_to_read.readline()  # 整行读取数据
+                if not lines:
+                    break
+                lines = lines.split("\n")[0]
+                gt_offset.append([int(lines.split(",")[0]), int(lines.split(",")[1])])  # 以'，'为分割符 分为前后两个字符
 
-    # def delete_test_data(self):
-    #     """
-    #     删除上次运行的结果文件
-    #     :return:
-    #     """
-    #     if os.path.exists(self.image_offset_dir):
-    #         shutil.rmtree(self.image_offset_dir)
-    #     if os.path.exists(self.image_noise_dir):
-    #         shutil.rmtree(self.image_noise_dir)
-    #     if os.path.exists(self.image_offset_txt):
-    #         os.remove(self.image_offset_txt)
-    #     print("清除上次测试数据")
+        print(gt_offset)
+        last_image = cv2.imdecode(np.fromfile(self.images_address_list[0], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+        self.image_shape = last_image.shape  # 695 * 531
+        last_kps, last_features = self.calculate_feature(last_image)  # 第000张图像
+        self.last_image_feature.kps = last_kps
+        self.last_image_feature.features = last_features  # 存为全局变量
+        self.is_available_list.append(True)
+        start_time = time.time()
+        for i in range(1, len(self.images_address_list)):  # 001 开始到 055
+            next_image = cv2.imdecode(np.fromfile(self.images_address_list[i], dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+            print(self.images_address_list[i])
+            total_status, offset = self.calculate_offset_by_feature(next_image)
+            if total_status:
+                match_mode_num = match_mode_num + 1
+                self.is_available_list.append(True)
+                self.offset_list.append(offset)
+            else:
+                self.is_available_list.append(False)
+                self.offset_list.append([0, 0])
+            if offset == gt_offset[i]:
+                match_offset_num = match_offset_num + 1
+                match_result = True
+            else:
+                match_result = False
+            self.print_and_log("第{}张偏移图片匹配结果：{}, 真实值：{}， 计算值：{}".format(i, match_result, gt_offset[i], offset))
+        end_time = time.time()
+        self.print_and_log("The time of matching is {:.3f} \'s".format(end_time - start_time))
+        self.print_and_log("--------------------------------")
+        match_mode_percentage = match_mode_num / (len(self.images_address_list) - 1)
+        self.print_and_log('通过众数计算结果的正确率为：{:.2%}'.format(match_mode_percentage))
+
+        match_offset_percentage = match_offset_num / (len(self.images_address_list) - 1)
+        self.print_and_log('通过对比偏移量和计算结果的实际正确率为：{:.2%}'.format(match_offset_percentage))
+
+        print(self.offset_list)
+        # 拼接图像
+        print("Start stitching")
+        start_time = time.time()
+        tracked_image = self.get_stitch_by_offset()
+        end_time = time.time()
+        print("The time of fusing is {:.3f} \'s".format(end_time - start_time))
+        return tracked_image
 
     def calculate_feature(self, input_image):
         """
@@ -372,11 +336,15 @@ class ImageTrack(Utility.Method):
         # 如果你不细心，不要碰这段代码
         # 已优化到根据指针来控制拼接，CPU下最快了
         min_dx, min_dy = 0, 0
-        result_row = self.image_shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴
-        result_col = self.image_shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴
+        result_row = self.image_shape[0]  # 拼接最终结果的横轴长度,先赋值第一个图像的横轴 695
+        result_col = self.image_shape[1]  # 拼接最终结果的纵轴长度,先赋值第一个图像的纵轴 531
+        print(1)
+        print(self.offset_list)
         self.offset_list.insert(0, [0, 0])  # 增加第一张图像相对于最终结果的原点的偏移量
+        print(self.offset_list)
         temp_offset_list = self.offset_list.copy()
         offset_list_origin = self.offset_list.copy()
+        print(self.is_available_list)
         for i in range(1, len(temp_offset_list)):
             if self.is_available_list[i] is False:
                 continue
@@ -385,10 +353,10 @@ class ImageTrack(Utility.Method):
             if dx <= 0:
                 if dx < min_dx:
                     for j in range(0, i):
-                        temp_offset_list[j][0] = temp_offset_list[j][0] + abs(dx - min_dx)
-                    result_row = result_row + abs(dx - min_dx)
+                        temp_offset_list[j][0] = temp_offset_list[j][0] + abs(dx - min_dx)  # 将之前的偏移量逐个增加
+                    result_row = result_row + abs(dx - min_dx)  # 最终图像的row增加
                     min_dx = dx
-                    temp_offset_list[i][0] = 0
+                    temp_offset_list[i][0] = 0  # 将该图像的row置为最小偏移
                 else:
                     temp_offset_list[i][0] = temp_offset_list[0][0] + dx
             else:
@@ -433,12 +401,13 @@ class ImageTrack(Utility.Method):
                     roi_rby = self.offset_list[i][1] + image.shape[1]
                     # 从原本图像切出来感兴趣区域 last_roi_fuse_region
                     last_roi_fuse_region = stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
-                    # 将该拼接的图像赋值给 stitch_result
+                    # 将该拼接的图像赋值给 stitch_result  先将图像覆盖上去
                     stitch_result[
                         self.offset_list[i][0]: self.offset_list[i][0] + image.shape[0],
                         self.offset_list[i][1]: self.offset_list[i][1] + image.shape[1]] = image
                     # 再切出来感兴趣区域 next_roi_fuse_region
                     next_roi_fuse_region = stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby].copy()
+                    print(next_roi_fuse_region.shape[0:2])
                     # 融合后再放到该位置
                     stitch_result[roi_ltx:roi_rbx, roi_lty:roi_rby] = self.fuse_image(
                         [last_roi_fuse_region, next_roi_fuse_region],
@@ -478,6 +447,11 @@ class ImageTrack(Utility.Method):
             fuse_region = image_fusion.fuse_by_trigonometric(overlap_rfrs, dx, dy)
         elif self.fuse_method == "multiBandBlending":
             fuse_region = image_fusion.fuse_by_multi_band_blending([last_rfr, next_rfr])
+        elif self.fuse_method == "spatialFrequency":
+            fuse_region = image_fusion.fuse_by_spatial_frequency([last_rfr, next_rfr])
+        elif self.fuse_method == "spatialFrequencyAndMultiBandBlending":
+            print(123)
+            fuse_region = image_fusion.fuse_by_sf_and_mbb([last_rfr, next_rfr])
         return fuse_region
 
     def get_offset_by_mode(self, last_kps, next_kps, matches):

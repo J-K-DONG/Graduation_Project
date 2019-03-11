@@ -2,31 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="daf4d50d-124c-49f0-a3da-cb66f0aa2c50" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/ImageProcessing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ImageProcessing.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageFusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImageFusion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImageProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImageProcess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageUtility.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImageUtility.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/method_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/method_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/offset_data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/offset_data.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/result.jpeg" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/ImageProcessing$method_test.coverage" NAME="method_test Coverage Results" MODIFIED="1550902935743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ImageProcessing$ImageProcess.coverage" NAME="ImageProcess Coverage Results" MODIFIED="1551701316140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ImageProcessing$Main.coverage" NAME="Main Coverage Results" MODIFIED="1551677898057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/random_images" />
-    <SUITE FILE_PATH="coverage/ImageProcessing$Main__1_.coverage" NAME="Main (1) Coverage Results" MODIFIED="1551701562733" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ImageProcessing$method_test.coverage" NAME="method_test Coverage Results" MODIFIED="1552286857759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ImageProcessing$ImageProcess.coverage" NAME="ImageProcess Coverage Results" MODIFIED="1552215861928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ImageProcessing$Main__1_.coverage" NAME="Main (1) Coverage Results" MODIFIED="1552293078966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+            <state relative-caret-position="180">
+              <caret line="12" column="36" lean-forward="true" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -34,19 +39,55 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ImageDenoise.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ImageDenoise.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="ImageProcess.py" pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ImageProcess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="409" selection-start-line="409" selection-end-line="409" selection-end-column="70" />
+            <state relative-caret-position="-5328">
+              <caret line="285" column="28" selection-start-line="285" selection-start-column="28" selection-end-line="285" selection-end-column="28" />
               <folding>
                 <element signature="e#152#162#0" expanded="true" />
-                <element signature="e#359#436#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ImageFusion.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="271" column="21" lean-forward="true" selection-start-line="271" selection-start-column="21" selection-end-line="271" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#170#454#0" />
+                <element signature="e#515#743#0" />
+                <element signature="e#804#1032#0" />
+                <element signature="e#1096#6598#0" />
+                <element signature="e#6668#9056#0" />
+                <element signature="e#9119#11535#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ImageUtility.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-176">
+              <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/method_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1117">
+              <caret line="142" column="18" selection-start-line="142" selection-start-column="18" selection-end-line="142" selection-end-column="18" />
+              <folding>
+                <element signature="e#151#160#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -73,32 +114,21 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/method_test.py" />
         <option value="$PROJECT_DIR$/offset_data.txt" />
         <option value="$PROJECT_DIR$/random_images/Main.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/ImageUtility.py" />
         <option value="$PROJECT_DIR$/ImageDenoise.py" />
-        <option value="$PROJECT_DIR$/ImageFusion.py" />
+        <option value="$PROJECT_DIR$/ImageUtility.py" />
         <option value="$PROJECT_DIR$/Main.py" />
+        <option value="$PROJECT_DIR$/ImageFusion.py" />
+        <option value="$PROJECT_DIR$/method_test.py" />
         <option value="$PROJECT_DIR$/ImageProcess.py" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
-  <component name="NodePackageJsonFileManager">
-    <packageJsonPaths />
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1815" />
-    <option name="y" value="128" />
-    <option name="width" value="2394" />
-    <option name="height" value="401" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -108,7 +138,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -120,6 +149,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -165,6 +195,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="Main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="ImageProcessing" />
@@ -184,6 +217,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="ImageProcessing" />
@@ -203,6 +239,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="method_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="ImageProcessing" />
@@ -222,6 +261,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.ImageProcess" />
@@ -232,9 +274,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Main (1)" />
+        <item itemvalue="Python.method_test" />
         <item itemvalue="Python.ImageProcess" />
         <item itemvalue="Python.Main" />
-        <item itemvalue="Python.method_test" />
       </list>
     </recent_temporary>
   </component>
@@ -252,66 +294,45 @@
       <workItem from="1549937524506" duration="1615000" />
       <workItem from="1550366015488" duration="19793000" />
       <workItem from="1550813193396" duration="17221000" />
+      <workItem from="1552022836723" duration="27961000" />
+      <workItem from="1552289369993" duration="4152000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38660000" />
+    <option name="totallyTimeSpent" value="70773000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1088" y="-302" width="1096" height="1896" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50214595" side_tool="true" weight="0.18915662" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Python Console" order="12" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49785408" visible="true" weight="0.4401588" />
-      <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23166023" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="3" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19957082" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49785408" visible="true" weight="0.3325301" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50214595" side_tool="true" weight="0.18915662" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="4" />
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/image_noise/img_4_gaussian_noise_sigma_0.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_3_gaussian_noise_sigma_1.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_2_gaussian_noise_sigma_1.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_1_gaussian_noise_sigma_2.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_2_gaussian_noise_sigma_48.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_3_gaussian_noise_sigma_48.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_4_gaussian_noise_sigma_46.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_1_gaussian_noise_sigma_9.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_5_gaussian_noise_sigma_18.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_1_gaussian_noise_sigma_29.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_2_gaussian_noise_sigma_14.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_3_gaussian_noise_sigma_15.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_4_gaussian_noise_sigma_30.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_5_gaussian_noise_sigma_15.jpeg" />
-    <entry file="file://$PROJECT_DIR$/image_noise/img_3_gaussian_noise_sigma_2.jpeg" />
     <entry file="file://$PROJECT_DIR$/image_noise/img_5_gaussian_noise_sigma_9.jpeg" />
     <entry file="file://$PROJECT_DIR$/image_noise/img_1_gaussian_noise_sigma_0.jpeg" />
     <entry file="file://$PROJECT_DIR$/image_noise/img_2_gaussian_noise_sigma_4.jpeg" />
@@ -333,73 +354,131 @@
     <entry file="file://$PROJECT_DIR$/image_noise/img_3_gaussian_noise_sigma_33.jpeg" />
     <entry file="file://$PROJECT_DIR$/image_noise/img_4_gaussian_noise_sigma_39.jpeg" />
     <entry file="file://$PROJECT_DIR$/image_noise/img_5_gaussian_noise_sigma_22.jpeg" />
-    <entry file="file://$PROJECT_DIR$/method_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="66" column="20" selection-start-line="66" selection-start-column="20" selection-end-line="66" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/random_images/img_015_gaussian_noise_sigma_21_offset_6_24.jpeg" />
     <entry file="file://$PROJECT_DIR$/random_images/img_004_gaussian_noise_sigma_2_offset_-15_-17.jpeg" />
     <entry file="file://$PROJECT_DIR$/random_images/img_005_gaussian_noise_sigma_36_offset_-13_24.jpeg" />
     <entry file="file://$PROJECT_DIR$/random_images/img_001_gaussian_noise_sigma_14_offset_-22_-13.jpeg" />
     <entry file="file://$PROJECT_DIR$/random_images/img_000_gaussian_noise_sigma_3_offset_0_0.jpeg" />
     <entry file="file://$PROJECT_DIR$/random_images/Main.py" />
+    <entry file="file://$USER_HOME$/ImageProcessing/lib/python3.6/site-packages/scipy/ndimage/measurements.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="30" column="61" selection-start-line="30" selection-start-column="61" selection-end-line="30" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/random_images/img_001_gaussian_noise_sigma_25_offset_19_15.jpeg" />
+    <entry file="file://$PROJECT_DIR$/random_images/img_002_gaussian_noise_sigma_51_offset_-18_14.jpeg" />
+    <entry file="file://$PROJECT_DIR$/ImageDenoise.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/ntpath.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="74" column="4" selection-start-line="74" selection-start-column="4" selection-end-line="74" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/clear_img.jpeg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/random_images/img_014_gaussian_noise_sigma_14_offset_-23_13.jpeg" />
+    <entry file="file://$PROJECT_DIR$/random_images/img_017_gaussian_noise_sigma_48_offset_-11_-24.jpeg" />
+    <entry file="file://$PROJECT_DIR$/random_images/img_007_gaussian_noise_sigma_44_offset_3_-11.jpeg" />
     <entry file="file://$PROJECT_DIR$/offset_data.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/glob.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" column="4" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+        <state relative-caret-position="195">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ImageUtility.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1518">
-          <caret line="68" column="29" selection-start-line="68" selection-start-column="29" selection-end-line="68" selection-end-column="29" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/img_blur.jpeg">
+      <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/ImageFusion.py">
+    <entry file="file://$PROJECT_DIR$/random_images/img_000_gaussian_noise_sigma_0_offset_0_0.jpeg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/random_images/img_009_gaussian_noise_sigma_42_offset_-3_-16_Gaussian_blur_122_17.jpeg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/1.jpeg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$USER_HOME$/ImageProcessing/lib/python3.6/site-packages/numpy/core/numeric.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="376" column="29" lean-forward="true" selection-start-line="376" selection-start-column="29" selection-end-line="376" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#1096#6598#0" />
-            <element signature="e#6668#9056#0" />
-            <element signature="e#9119#11535#0" />
-            <element signature="e#13525#13837#0" />
-          </folding>
+        <state relative-caret-position="531">
+          <caret line="222" selection-start-line="222" selection-end-line="222" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/result.jpeg">
       <provider selected="true" editor-type-id="images" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/fuseRegion.jpeg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="4" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+        <state relative-caret-position="180">
+          <caret line="12" column="36" lean-forward="true" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ImageDenoise.py">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/ImageUtility.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-176">
+          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/method_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1117">
+          <caret line="142" column="18" selection-start-line="142" selection-start-column="18" selection-end-line="142" selection-end-column="18" />
+          <folding>
+            <element signature="e#151#160#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ImageProcess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="409" selection-start-line="409" selection-end-line="409" selection-end-column="70" />
+        <state relative-caret-position="-5328">
+          <caret line="285" column="28" selection-start-line="285" selection-start-column="28" selection-end-line="285" selection-end-column="28" />
           <folding>
             <element signature="e#152#162#0" expanded="true" />
-            <element signature="e#359#436#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ImageFusion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="271" column="21" lean-forward="true" selection-start-line="271" selection-start-column="21" selection-end-line="271" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#170#454#0" />
+            <element signature="e#515#743#0" />
+            <element signature="e#804#1032#0" />
+            <element signature="e#1096#6598#0" />
+            <element signature="e#6668#9056#0" />
+            <element signature="e#9119#11535#0" />
           </folding>
         </state>
       </provider>
