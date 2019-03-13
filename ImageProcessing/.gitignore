@@ -1,7 +1,10 @@
 *.[jpeg]
 *.[txt]
-.idea/
-random_images/
-__pycache__/
+.idea\\
+random_images\\
+__pycache__\\
 .pyc
 .xml
+.idea/workspace.xml
+.ideamisc.xml
+ImageProcessing.iml
