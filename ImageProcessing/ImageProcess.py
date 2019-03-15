@@ -95,18 +95,18 @@ class ImageTrack(Utility.Method):
         f = open('offset_data.txt', 'a')
         self.print_and_log("Generating images")
         names_list = []
-        offset_list = []
-        sigma_list = []
         roi_length = 50
 
         for k in range(0, image_num + 1):
             random_image = input_image.copy()
+            sigma = 0
+            block_size = 0
             if k == 0:
                 offset = [0, 0]
                 sigma = 0
-                flag = False
                 dx_blur = 0
                 dy_blur = 0
+                block_size = 0
             else:
                 # 增加随机偏移
                 random_image, offset = self.add_random_offset(random_image)
@@ -118,10 +118,8 @@ class ImageTrack(Utility.Method):
                 # random_image = self.add_salt_pepper_noise(random_image)
 
                 # 增加随机高斯模糊
-                random_image, flag, dx_blur, dy_blur = self.add_gaussian_blur(random_image)
+                random_image, dx_blur, dy_blur, block_size = self.add_gaussian_blur(random_image)
 
-            offset_list.append(offset)
-            sigma_list.append(sigma)
             f.write(str(offset[0]) + "," + str(offset[1]) + "\n")
 
             # 裁剪roi区域，避免四周有黑色边缘
@@ -131,7 +129,7 @@ class ImageTrack(Utility.Method):
             # 命名并保存
             image_name = "img_" + str(k).zfill(3) + "_gaussian_noise_sigma_" + str(sigma) + "_offset_" + str(offset[0])\
                          + "_" + str(offset[1])
-            image_name_blur = "_Gaussian_blur_" + str(dx_blur) + "_" + str(dy_blur) + ".jpeg" if flag else ".jpeg"
+            image_name_blur = "_Gaussian_blur_" + str(dx_blur) + "_" + str(dy_blur) + "_" + str(block_size) + ".jpeg"
             image_name = image_name + image_name_blur
             names_list.append(image_name)
             cv2.imwrite(os.path.join(self.images_dir, image_name), random_image)
@@ -193,28 +191,22 @@ class ImageTrack(Utility.Method):
     @staticmethod
     def add_gaussian_blur(input_img):
         """
-        在随机区域添加高斯模糊
-        :param input_img:
-        :return:
+        在随机区域添加高斯模糊，首先随机生成区块大小，其次随机确定区块起始位置，再次将该区块高斯模糊（kernel=(5,5),sigma=20）
+        :param input_img:输入图像
+        :return:输出高斯模糊结果,模糊起始位置大小(dx,dy）,区块大小，block_size
         """
-        dx = 0
-        dy = 0
-        flag = False
         kernel_size = (5, 5)
-        block_size = 200
+        block_size = random.randint(0, 200)
         sigma = 20
-        temp = random.randint(0, 3)
         row, col = input_img.shape[0:2]
-        if temp is 0:
-            flag = True
-            dx = random.randint(0, row - block_size)
-            dy = random.randint(0, col - block_size)
-            img_block = cv2.GaussianBlur(input_img[dx:dx + block_size, dy:dy + block_size], kernel_size, sigma)
-            # print(img_block)
-            # print(img_block.shape[0:2])
-            # print(dx, dy)
-            input_img[dx:dx + block_size, dy:dy + block_size] = img_block
-        return input_img, flag, dx, dy
+        dx = random.randint(0, row - block_size)
+        dy = random.randint(0, col - block_size)
+        blur_block = cv2.GaussianBlur(input_img[dx:dx + block_size, dy:dy + block_size], kernel_size, sigma)
+        # print(img_block)
+        # print(img_block.shape[0:2])
+        # print(dx, dy)
+        input_img[dx:dx + block_size, dy:dy + block_size] = blur_block
+        return input_img, dx, dy, block_size
 
     def start_track_and_fuse(self):
         """
@@ -655,3 +647,17 @@ if __name__ == "__main__":
     tracker = ImageTrack(os.path.join(project_address, "random_images"))
     clear_image = cv2.imread("clear_img.jpeg", 0)
     tracker.generate_random_noise_and_offset(clear_image, image_num=55)
+
+    # 生成合成图像
+    result = np.zeros((500, 1000), dtype=np.uint8)
+    images_list = glob.glob(".\\random_images\\*jpeg")
+    for i in range(0, 50):
+        print(i)
+        image = cv2.imread(images_list[i], 0)
+        row_start = (i // 10) * 100
+        col_start = (i % 10) * 100
+        resized_image = cv2.resize(image, (100, 100), cv2.INTER_CUBIC)
+        result[row_start: row_start + 100, col_start: col_start + 100] = resized_image
+    cv2.imshow("result", result)
+    cv2.waitKey(0)
+

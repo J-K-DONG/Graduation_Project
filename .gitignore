@@ -1,4 +1,9 @@
 
-./ImageProcessing/.idea/workspace.xml
+ImageProcessing/.idea/workspace.xml
 *.iml
 *.xml
+*.jpeg
+*.txt
+ImageProcessing\offset_data.txt
+*.pyc
+ImageProcessing/offset_data.txt
